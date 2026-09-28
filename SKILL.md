@@ -143,12 +143,15 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 - **Plain text pulled from the PDF** — keeps the words, loses table structure, watermarks and
   strikethroughs; returns nothing on a scan with no stored text.
 - **Table-rebuilding tools (Docling and similar)** — strong on clean tables, fast and cheap;
-  seen repeating headings, shifting a value into a header, missing a draft watermark.
+  seen repeating headings, shifting a value into a header, missing a draft watermark — though
+  duplicating a header across every column it spans is also how it corrects a merged column
+  heading that plain text or Markdown can only place under one column.
 - **Document-specialist readers (Chandra and similar)** — best seen on messy and handwritten
   tables and on keeping a struck-out edit exactly right; broke badly on a dense grid form.
 - **General image-reading models (Gemini and similar)** — the only reader to get a handwritten
   name and all six checkboxes right on one bank form, and the most expensive tried; also seen
-  misreading a digit and tidying a printed value.
+  misreading a digit, tidying a printed value, and returning a Markdown table with a merged
+  column heading left under only one of the columns it actually spans.
 - **Layout and location tools (Surya and similar)** — give the box on the page so users can
   click through to the source; weaker text, and once invented a table.
 - **Cloud services (Textract and similar)** — handled a big clean table well; dropped plus and
