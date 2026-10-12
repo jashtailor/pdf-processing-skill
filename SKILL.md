@@ -5,7 +5,7 @@ description: Practical craft for setting up and testing document-extraction agen
 
 # Getting information out of documents, reliably
 
-Distilled from 139 posts collected from Isaac Flath (@isaac_flath), mostly June–October 2026.
+Distilled from 154 posts collected from Isaac Flath (@isaac_flath), mostly June–October 2026.
 See "Where this comes from" for what the source misses.
 
 ## When to use this
@@ -37,7 +37,17 @@ can ask an engineer.
   up things that were never interchangeable.
 - **No tool wins everywhere, so test on your own pages.** On one page the cheap option is
   right and the expensive one wrong; on the next it flips. Two tools agreeing isn't proof
-  either is right — only a person's labelled answer is.
+  either is right — only a person's labelled answer is. Agreement is still worth recording,
+  because *dis*agreement is a cheap way to pick the pages a person must check: one team builds
+  its labels by running eight readers over the same table, keeping the answers that agree and
+  sending the rest to a person. They say themselves that models can still all agree on the
+  same wrong answer.
+- **A leaderboard position is not information until you know what is in the benchmark.** Top
+  of the table tells you nothing on its own — ask which pages were scored, and look at the
+  examples. Real intake does not look like benchmark data: the requests Isaac gets are tables,
+  scans, charts, and detailed blueprints with parts lists to pull off them, while public
+  benchmarks lean towards simpler text pages. He flags a selection effect — people bring him
+  their hardest pages — but the direction of the gap is the point.
 - **Make checking cheap, then measure what it costs you.** If every answer points back to
   the spot on the page it came from, a person confirms it in seconds. A teacher converting
   maths worksheets said checking fell from hours to five or ten minutes — that, not the
@@ -48,6 +58,11 @@ can ask an engineer.
 - **Ask for the shape you need.** Requesting structured records, or HTML instead of plain
   text for tables with merged cells, has fixed more problems than switching tools — plain
   text can't say "this heading covers four columns." Usually a setting you control.
+- **Ask which model is reading the image inside the product.** The same tool can pass or fail
+  on the same page depending on what is plugged into it. One table-rebuilding tool, left on
+  its small default image model, misread every label and duration on a chart; the same tool
+  with a larger image model read all six values correctly. Before you write a tool off, find
+  out whether that part is a setting you can change.
 - **You cannot tell whether a change to your instructions helped by reading the instructions.**
   Two people ran the same question through a carefully written instruction, a stripped-down
   version of it, and no instruction at all. The answers were all over the place, and no
@@ -64,18 +79,29 @@ can ask an engineer.
    what decides which readers are candidates at all.
 3. **Collect 50–100 typical pages** — typical of real intake, not the clean samples. Put the
    hard cases in on purpose: faded signatures, rotated scans, handwriting, drawing sheets.
+   Treat that count as a start, not a finish: variety matters more than volume, and the set
+   keeps growing as new document types arrive. Isaac spent over two months labelling daily and
+   still did not have enough different kinds of page.
 4. **Have people write the right answers down first**, field by field. That human-labelled
    set *is* the test. An automatic scorer, AI grader included, only copies those judgments so
-   they can run at scale — it comes second, never first.
+   they can run at scale — it comes second, never first. This is skilled, slow work, not a job
+   to hand to whoever is free — reading a bad page well is itself a skill, and most teams never
+   build a set of their own. When a page is too degraded for a person to read with confidence,
+   settle the answer from outside the page — look the product or the form up — rather than taking
+   any reader's version of it.
 5. **Score exact matches, field by field** — not "did it roughly get it." Split failures into
    misread, missing and invented: "82%" doesn't tell you what to fix, "eleven invented" does.
    Record each failure *on the page*: mark the spot it happened, write what went wrong, and tie
    that note to the answer it came from. A plain list of notes is unsearchable a week later —
    "where was the 9 read as a 3?" — and a marked-up page is not.
-6. **Compare accuracy, cost and speed together**, and send licensing and hosting questions to
-   an engineer before anything ships.
+6. **Compare accuracy, cost and speed together** — and record them per page and per reader,
+   not just as one average. That per-page gap is what tells you which pages actually need the
+   expensive reader, and it is usually smaller than expected. Put it as a question anyone can
+   answer: is five more points of accuracy worth three more seconds on this page? Send
+   licensing and hosting questions to an engineer before anything ships.
 7. **Decide where failures go** — re-read the page, send only the failed fields to a
-   different reader, or route the document to a person.
+   different reader, or route the document to a person. Readers disagreeing with each other is
+   a good trigger for that last route, even when you cannot say which one is wrong.
 8. **Read a sample of the ones that passed.** Automatic checks only catch mistakes you
    already thought of. This is the step everyone skips.
 9. **Rerun your baseline when the scoring changes** — numbers from two versions of a scoring
@@ -93,7 +119,9 @@ Each habit, and what it catches.
 - **Do the totals math in code.** *Catches* a misread digit that looks plausible. An escrow
   term read as 23 months instead of 2: 23 × $100.83 is $2,319, not the stated $202, and the
   text looked fine. Pull the numbers out and let code do the arithmetic — a floor plan read
-  correctly still came out measured wrong.
+  correctly still came out measured wrong. Check ranges for the impossible while you are there:
+  a dropped leading digit turned a tax bracket into "over $197,300 but not over $50,525",
+  which no income can satisfy, and the tool reported it without complaint.
 - **Pick one way to write "blank" and enforce it.** *Catches* a break when the model
   underneath changes. On identical instructions one model wrote empty fields as `""` and
   another as `null`; both valid. State the convention and check every response against it.
@@ -105,6 +133,11 @@ Each habit, and what it catches.
   faint — one tool called all four signed, another found three at 32–41% confidence. Decide
   in advance: person, re-signed copy, or treat as unsigned, and where the line sits.
   Checkboxes fail more often than handwriting in almost every test; give them their own rule.
+- **Treat a flag as "look here", not "this is wrong".** *Catches* time spent fixing the wrong
+  thing. A tool that marks risky spots is doing the job of a radiologist circling an area on a
+  scan: pointing, not diagnosing. In one case the highlight landed on the right spot and the
+  reason given for it was wrong, and the label never said which words to change. Useful for
+  deciding where a person looks; not a substitute for the person.
 - **Ask about document status as its own question.** *Catches* a draft treated as a signed
   deal. On one agreement every date and amount was perfect and the diagonal "DRAFT, NOT FOR
   EXECUTION" stamp was dropped. Struck-out edits are worse: tools fuse the deleted words and
@@ -127,6 +160,18 @@ Each habit, and what it catches.
   a form grid, stopped at question 33 and dropped seven fields without a word. For a form
   you'll run thousands of times, build the field list from the *blank* copy — that gives you
   the instructions and a free missing-field check at once.
+- **Check whether the output looped or got cut off.** *Catches* a page silently thrown away,
+  and a block of invented repeats. Readers built on image models are prone to repeating
+  themselves: they are run at a low randomness setting because that transcribes more
+  accurately, and the price is that they can get stuck copying a block they already wrote. The
+  repeats are not always obvious — one case repeated a whole table section at a time, another
+  counted up as it went (S10, S11, S12), and both slipped past the product's own loop
+  detector. The usual safety net is a cap on output length, and the cap is where your pages go
+  missing: across 40,000 pages, 219 ran past the cap — 204 were genuine loops and 15 were real
+  pages that were simply long. Those 15 are the ones you care about: dense tables, agreements
+  with many signatures. So when a page comes back repeating or stopping mid-table, ask whether
+  it looped or whether it was cut off, and check that long legitimate pages are not being
+  binned as failures. The settings behind this are an engineer's to change.
 - **Decide whether you want an exact copy or a tidy one, then check for the one you chose.**
   *Catches* a model "correcting" your data. A printed lab value `HCO: 3:21` came back as
   `HCO3: 21`: plausible, tidy, wrong. But a printed "put put" quietly fixed to "output" is only
@@ -134,7 +179,10 @@ Each habit, and what it catches.
   is; for something people read and search, the tidy version is the better answer. Two readers
   on that same page split exactly this way, so this is a decision you state up front, not a
   behaviour you discover. Check exact digits on clean pages either way — one readable balance
-  sheet returned 369,488 for 365,848.
+  sheet returned 369,488 for 365,848. The same decision settles smaller things: two printed
+  lines on a medicine label, an NDC number and "Rx only", came back merged into one line.
+  Whether that is a defect depends on who uses the output and what for — so answer that before
+  you log it as one.
 - **When an answer is wrong, ask what the agent actually saw.** Many "it made that up" cases
   are "it never saw it" — wrong page, or an old version. If something is missing, crop to
   that spot and retry; page size and resolution are often the real cause.
@@ -152,7 +200,9 @@ you are buying.
   equation in the corner — and each piece goes to a part built for that kind of thing. Cheaper
   and faster, and you can swap in something better for the one piece that keeps failing. It
   suits forms that arrive in the same layout thousands of times, because the layout is known in
-  advance instead of being worked out afresh every page.
+  advance instead of being worked out afresh every page. The piece that cuts the page up
+  usually also decides what order the pieces are read in, and both of those can go wrong
+  before a single word is read.
 - **The chain's blind spot is the page as a whole.** It assumes every piece can be understood
   on its own. When a sentence points at a chart, the part reading the sentence never sees the
   chart, and no amount of accuracy on either piece recovers the link.
@@ -164,7 +214,10 @@ into it and a scan of the same form filled in by hand look the same to you, but 
 text stored inside the file and the other is nothing but a picture. The file format preserves
 the page's appearance, not its meaning — even a signature might be typed text, a pasted image
 or an actual scanned signature. Check whether a page already has usable text before sending it
-anywhere, and route pages by difficulty instead of pushing everything down one path.
+anywhere, and route pages by difficulty instead of pushing everything down one path. Text you
+can select is not a clean bill of health either — it may itself be the output of a scan that
+was read once already, and it tells you nothing about whether the page will come back in a
+sensible order.
 
 | Page type | Difficulty | What typically goes wrong |
 |---|---|---|
@@ -181,7 +234,11 @@ anywhere, and route pages by difficulty instead of pushing everything down one p
 | Rotated pages | Hard | Fails until the page is turned upright as a separate first step |
 | Drafts, watermarks, redlines | Hard | Vanish silently and change what the document means |
 | Handwritten edits over typed text | Very hard | Three readers, three different wrong answers; none of them said which words were deleted |
-| Drawings and floor plans | Hard | Repeated symbols undercounted; measurements computed wrong |
+| Multi-column pages (papers, newspapers) | Hard | Read in the wrong order — abstract after the introduction, one interview spliced into the next — while every word is correct |
+| Charts with printed labels and values | Medium | Readable, but only by a strong enough image model — a small default one relabelled a bar "Crash" and turned 0.2 seconds into -1.5 |
+| Curved, warped or angled text (photos of objects, tilted cards) | Hard | A straight rectangle round slanted text swallows its neighbours — part of the title lands in the paragraph |
+| Very long or very dense pages | Hard | Output runs past a length cap and the page is discarded as a failure — big tables and many-signature agreements are the usual casualties |
+| Drawings and floor plans | Hard | Repeated symbols undercounted; measurements computed wrong; parts lists off electrical and construction blueprints are a common real request and barely appear in public benchmarks |
 | Colour-coded tables | Hard | The colour is the value, and it gets discarded |
 | Dense grid forms (census-style) | Very hard | Sections skipped, columns mislabelled, output loops until it gives up |
 | Scanned equations | Very hard | Replaced with placeholders, transcribed as garbage, or quietly rewritten — one dropped exponent turned a formula into a different, perfectly readable one |
@@ -201,7 +258,13 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   heading that plain text or Markdown can only place under one column. Also seen dropping an
   exponent boundary when asked to handle formulas, and mangling the first sentence of a
   degraded scan. It now reads PowerPoint and Apple Keynote decks too, pulling data out of the
-  charts in them.
+  charts in them. A newer version uses the section lines printed on a page to work out reading
+  order, and on two tests it fixed it: the abstract read before the introduction on a research
+  paper, and a newspaper's interview columns finished before the portraits underneath. It read a
+  tax worksheet's income limit correctly where a cheap classical reader dropped a digit. Left on
+  its small default image model it misread an entire chart, labels and durations both, and the
+  same chart read with a larger image model plugged in came back with every value right — the
+  clearest example here that the tool and the model inside it are different questions.
 - **Document-specialist readers (Chandra and similar)** — best seen on messy and handwritten
   tables, and read a degraded declassified cable — first sentence and routing grid both — that
   a table-rebuilding tool mangled. On a handwritten crossed-out edit it returned both the
@@ -221,7 +284,10 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   click through to the source; weaker text, and once invented a table. Its equation block kept
   an exponent that a table-rebuilding tool lost. Worth knowing that these regions need not be
   horizontal rectangles — they can follow angled and warped text, so click-through lands on the
-  words instead of a loose box around them.
+  words instead of a loose box around them. Newer ones (PP-DocLayoutV3 and similar) also
+  predict the order the regions should be read in. The shape matters because of field
+  extraction: a loose rectangle that swallows part of the title corrupts a single-field pull
+  off an intake form, birth certificate or licence.
 - **Track-changes features (Datalab and similar)** — built to report what was inserted and what
   was removed, rather than only the final sentence. On a handwritten edit it caught the
   insertion and dropped the deletion; the vendor's own examples are digital revisions, so
@@ -237,28 +303,36 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   timetable, faster and cheaper; its rotation detector fixed a sideways page nothing else read.
   It left a printed typo exactly as printed where others silently fixed it, which is the right
   behaviour or the wrong one depending on what you decided you wanted; it misread struck-through
-  handwriting badly.
+  handwriting badly. On a printed tax worksheet it dropped the leading digit of $250,525 and
+  returned $50,525, producing a bracket no income can fall in.
 - **Form-field and bundle-splitting tools** — turn a flat form into fillable fields, or split
   one file into separate documents. Good scoping ideas for construction and intake paperwork.
+- **Routers that decide when to spend the expensive reader** (Reducto and similar) — run the
+  fast and the slow reader side by side during evaluation, measure the score gain and the extra
+  seconds on each page, and predict from that whether the big one is worth calling. The point
+  for you is the measurement, not the machinery. The tool pair used to illustrate it was the
+  source's own example, not the vendor's.
 - **Agent-driven readers** are arriving, billed as accurate on genuinely hard pages, slowly and
   expensively. Worth testing on your worst pages only.
 - **To pass to an engineer, not act on:** at least one widely used Python PDF library carries a
-  licence that would require a commercial project to publish its own source code.
+  licence that would require a commercial project to publish its own source code. The randomness
+  setting and the output length cap that decide whether a page loops or gets truncated are also
+  theirs to change, not yours.
 
 ## Where this comes from
 
-139 items collected from one Instagram account: 120 reels, 16 story highlights, 3 stories. Two
-of the 139 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
-and several of the newest are two-person conversations, so this is not quite one person's
-account. Nobody watched the videos — every claim rests on a caption plus an automated
-description of what was on screen, and those descriptions state that exact slide text, table
-cells and chart values were not captured. **25 of the 139 are caption-only**: the description
-service returned nothing, so only the written caption survives and whatever was demonstrated on
-screen is absent here. Most of those 25 are highlights with little caption text, so the
-practical loss is small, but a few are substantive — a redline comparison, a wide formula table,
-a timetable cost comparison, a scoring-tool version warning — and their numbers have no second
-source. One of the newest items is a story with no caption and no description at all, so
-nothing of it survives.
+154 items collected from one Instagram account: 134 reels, 16 story highlights, 4 stories. Two
+of the 154 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
+and many of the newest are two- and three-person conversations with Hamel Husain and a co-host,
+Alexis, so this is not quite one person's account. Nobody watched the videos — every claim
+rests on a caption plus an automated description of what was on screen, and those descriptions
+state that exact slide text, table cells and chart values were not captured. **26 of the 154
+are caption-only**: the description service returned nothing, so only the written caption
+survives and whatever was demonstrated on screen is absent here. Most of those 26 are
+highlights with little caption text, so the practical loss is small, but a few are substantive —
+a redline comparison, a wide formula table, a timetable cost comparison, a scoring-tool version
+warning — and their numbers have no second source. Two of the newest items are stories with no
+caption and no description at all, so nothing of them survives.
 
 The descriptions themselves make mistakes worth knowing about. On one post the caption and the
 description describe different things. On another, the description calls Chandra "a human

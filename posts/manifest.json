@@ -1,14 +1,14 @@
 {
  "account": "isaac_flath",
- "collected_at": "2026-10-05",
- "newest_created_at": "2026-10-04 12:00:36",
- "newest_reel_created_at": "2026-10-04 12:00:36",
+ "collected_at": "2026-10-12",
+ "newest_created_at": "2026-10-11 12:00:19",
+ "newest_reel_created_at": "2026-10-10 10:02:02",
  "counts": {
-  "reel": 120,
+  "reel": 134,
   "highlight": 16,
-  "story": 3
+  "story": 4
  },
- "items_without_visual_description": 25,
+ "items_without_visual_description": 26,
  "notes": "Fetched via instagram-cli posts (paginated with --until/--sort-order since no cursor was returned) plus --post-types HIGHLIGHT and STORY. Visual content comes from instagram-cli media-understanding; the CLI exposes no media files, so frames were not viewed directly.",
  "items": [
   {
@@ -1261,6 +1261,141 @@
    "shortcode": "DeFVcxIAdjD",
    "local_file": "2026-10-04-DeFVcxIAdjD.md",
    "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeHeykPCllF/",
+   "date": "2026-10-05 08:01:07",
+   "type": "reel",
+   "post_id": "18107400143239414",
+   "shortcode": "DeHeykPCllF",
+   "local_file": "2026-10-05-DeHeykPCllF.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeHskihFQH8/",
+   "date": "2026-10-05 10:01:23",
+   "type": "reel",
+   "post_id": "18132351925737302",
+   "shortcode": "DeHskihFQH8",
+   "local_file": "2026-10-05-DeHskihFQH8.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeH6P3qComl/",
+   "date": "2026-10-05 12:01:02",
+   "type": "reel",
+   "post_id": "18110667395047337",
+   "shortcode": "DeH6P3qComl",
+   "local_file": "2026-10-05-DeH6P3qComl.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeKDmC4CSaP/",
+   "date": "2026-10-06 08:01:07",
+   "type": "reel",
+   "post_id": "18033214823845843",
+   "shortcode": "DeKDmC4CSaP",
+   "local_file": "2026-10-06-DeKDmC4CSaP.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeKRTWsANPf/",
+   "date": "2026-10-06 10:01:35",
+   "type": "reel",
+   "post_id": "18098059958398229",
+   "shortcode": "DeKRTWsANPf",
+   "local_file": "2026-10-06-DeKRTWsANPf.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeKfCX1goHP/",
+   "date": "2026-10-06 12:00:38",
+   "type": "reel",
+   "post_id": "18068848139759994",
+   "shortcode": "DeKfCX1goHP",
+   "local_file": "2026-10-06-DeKfCX1goHP.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeMoZAyggvR/",
+   "date": "2026-10-07 08:01:43",
+   "type": "reel",
+   "post_id": "18135796201650387",
+   "shortcode": "DeMoZAyggvR",
+   "local_file": "2026-10-07-DeMoZAyggvR.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeM2N_DjPYZ/",
+   "date": "2026-10-07 10:02:17",
+   "type": "reel",
+   "post_id": "18130368307781171",
+   "shortcode": "DeM2N_DjPYZ",
+   "local_file": "2026-10-07-DeM2N_DjPYZ.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DePNK6AgMsN/",
+   "date": "2026-10-08 08:00:59",
+   "type": "reel",
+   "post_id": "18014629031953612",
+   "shortcode": "DePNK6AgMsN",
+   "local_file": "2026-10-08-DePNK6AgMsN.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DePa7ZCFUVx/",
+   "date": "2026-10-08 10:01:13",
+   "type": "reel",
+   "post_id": "18093890225664517",
+   "shortcode": "DePa7ZCFUVx",
+   "local_file": "2026-10-08-DePa7ZCFUVx.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeRx_ZXFT42/",
+   "date": "2026-10-09 08:01:13",
+   "type": "reel",
+   "post_id": "18091465238690855",
+   "shortcode": "DeRx_ZXFT42",
+   "local_file": "2026-10-09-DeRx_ZXFT42.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeR_sjSkUJX/",
+   "date": "2026-10-09 10:00:59",
+   "type": "reel",
+   "post_id": "17928836109419717",
+   "shortcode": "DeR_sjSkUJX",
+   "local_file": "2026-10-09-DeR_sjSkUJX.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeUWz-7FAgX/",
+   "date": "2026-10-10 08:01:41",
+   "type": "reel",
+   "post_id": "18425430628147500",
+   "shortcode": "DeUWz-7FAgX",
+   "local_file": "2026-10-10-DeUWz-7FAgX.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DeUknHakQMy/",
+   "date": "2026-10-10 10:02:02",
+   "type": "reel",
+   "post_id": "18033808379899777",
+   "shortcode": "DeUknHakQMy",
+   "local_file": "2026-10-10-DeUknHakQMy.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/stories/isaac_flath/4005771610565477355",
+   "date": "2026-10-11 12:00:19",
+   "type": "story",
+   "post_id": "18136855612726682",
+   "shortcode": "story-4005771610565477355",
+   "local_file": "2026-10-11-story-4005771610565477355.md",
+   "has_visual_description": false
   }
  ]
 }
