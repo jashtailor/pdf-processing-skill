@@ -87,6 +87,12 @@ they're a setting or an instruction you choose inside the product you already us
   merged-heading table that plain text flattens into a misaligned row.
 - **A new output shape is still a change — test it like one.** Run it through your test set
   before you trust that "structured" fixed anything; don't just take the setting's word for it.
+- **Look for a speed/cost tier setting too, before deciding a tool is too slow or expensive.**
+  Vendor UIs can offer several modes — "fast/turbo" vs "cost-effective" vs "high-accuracy/agentic"
+  — that return identical values at very different speeds and costs. One comparison found Turbo
+  3–4x faster than Cost Effective with no accuracy difference on the same pages, just more
+  credits per page; a separate, slower "Agentic" tier existed for the hard documents that need it.
+  Picking the mode is often the fix, not switching vendors.
 
 ## The test-first method
 
@@ -135,6 +141,11 @@ they're a setting or an instruction you choose inside the product you already us
 9. **Rerun your baseline when the scoring changes** — numbers from two versions of a scoring
    tool aren't comparable. A day-to-day set of 10–40 examples is normal, but one that small
    gets tuned into meaninglessness if you stop reading actual cases.
+10. **Keep a second, standing test set, separate from this project's set.** This one is a
+    personal library of varied real documents — financial tables, census forms, charts, patent
+    diagrams, loan documents, handwriting, watermarks — that you reuse every time a new tool or
+    model claim shows up. It lets you sanity-check a claim in minutes instead of building a test
+    set from scratch each time a new one appears.
 
 ## Checking habits
 
@@ -161,6 +172,11 @@ Each habit, and what it catches.
   faint — one tool called all four signed, another found three at 32–41% confidence. Decide
   in advance: person, re-signed copy, or treat as unsigned, and where the line sits.
   Checkboxes fail more often than handwriting in almost every test; give them their own rule.
+  Finding the field and judging its state are two separate steps — test them separately, don't
+  assume a tool that locates boxes correctly also reads them correctly. One state model scored
+  a blank text field at 0.007 filled and a typed field at 0.892, which both look right — but a
+  clearly checked checkbox only scored 0.416, so checkboxes need their own check even when field
+  detection is working fine.
 - **Treat a flag as "look here", not "this is wrong".** *Catches* time spent fixing the wrong
   thing. A tool that marks risky spots is doing the job of a radiologist circling an area on a
   scan: pointing, not diagnosing. In one case the highlight landed on the right spot and the
@@ -292,7 +308,7 @@ sensible order.
 | Charts with printed labels and values | Medium | Readable, but only by a strong enough image model — a small default one relabelled a bar "Crash" and turned 0.2 seconds into -1.5 |
 | Curved, warped or angled text (photos of objects, tilted cards) | Hard | A straight rectangle round slanted text swallows its neighbours — part of the title lands in the paragraph |
 | Very long or very dense pages | Hard | Output runs past a length cap and the page is discarded as a failure — big tables and many-signature agreements are the usual casualties |
-| Drawings and floor plans | Hard | Repeated symbols undercounted; measurements computed wrong; parts lists off electrical and construction blueprints are a common real request and barely appear in public benchmarks |
+| Drawings and floor plans | Hard | Repeated symbols undercounted (fix: an engineer can use template matching — pick one example of a symbol and find all rotated copies on the page — instead of a bigger vision model); measurements computed wrong; parts lists off electrical and construction blueprints are a common real request and barely appear in public benchmarks |
 | Colour-coded tables | Hard | The colour is the value, and it gets discarded |
 | Dense grid forms (census-style) | Very hard | Sections skipped, columns mislabelled, output loops until it gives up |
 | Scanned equations | Very hard | Replaced with placeholders, transcribed as garbage, or quietly rewritten — one dropped exponent turned a formula into a different, perfectly readable one |
@@ -382,7 +398,10 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 - **To pass to an engineer, not act on:** at least one widely used Python PDF library carries a
   licence that would require a commercial project to publish its own source code. The randomness
   setting and the output length cap that decide whether a page loops or gets truncated are also
-  theirs to change, not yours.
+  theirs to change, not yours. If speed, not accuracy, is the problem, ask the engineer whether
+  the reader supports "speculative decoding" — it can roughly halve response time with no
+  accuracy loss, though the benefit fades once the system is already processing many pages at
+  once.
 
 ## Where this comes from
 
