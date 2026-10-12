@@ -69,6 +69,25 @@ can ask an engineer.
   instruction at all came much closer than either of them expected. Change one thing, run it
   against the test set, and read the answers.
 
+## Setting the output shape, inside the vendor UI
+
+"Ask for structured records" and "ask for HTML instead of plain text" are not code you write —
+they're a setting or an instruction you choose inside the product you already use.
+
+- **Look for a format or output-type setting first.** Most extraction tools have a dropdown,
+  toggle, or schema field somewhere in the agent or workflow configuration — words like "output
+  format," "response type," "schema," or "structured output." Picking "JSON" or "structured"
+  instead of "plain text" or "markdown" is usually the entire change.
+- **No dropdown? Say it in the instructions box.** If the tool only takes a written prompt, you
+  can ask for the shape in plain words in the same box where you describe what to extract: "return
+  one record per row, with fields named X, Y, Z" or "return the table as HTML, not plain text."
+- **"HTML instead of plain text" exists to fix one specific thing: a heading that spans more
+  than one column.** Plain text and plain Markdown tables can only put a heading over a single
+  column. HTML can say "this heading covers four columns," which is why it survives a
+  merged-heading table that plain text flattens into a misaligned row.
+- **A new output shape is still a change — test it like one.** Run it through your test set
+  before you trust that "structured" fixed anything; don't just take the setting's word for it.
+
 ## The test-first method
 
 1. **Name the wrong answer that would cause real damage** — a wrong signature status on a
@@ -82,6 +101,13 @@ can ask an engineer.
    Treat that count as a start, not a finish: variety matters more than volume, and the set
    keeps growing as new document types arrive. Isaac spent over two months labelling daily and
    still did not have enough different kinds of page.
+   - **Week one:** pull together your first 50–100 pages — enough of each page type you actually
+     receive, plus a handful of the hard cases above — and run the whole method once, end to
+     end, to get a real answer on the failure named in step 1. Don't wait for a bigger or
+     cleaner set before starting; a small real test beats a long delay building a perfect one.
+   - **After that, growing the set means adding, not re-collecting.** Add a few pages whenever a
+     new document type, vendor, or edge case shows up in real use. It's an ongoing habit attached
+     to normal work, not a second scheduled collection effort — the set is never really finished.
 4. **Have people write the right answers down first**, field by field. That human-labelled
    set *is* the test. An automatic scorer, AI grader included, only copies those judgments so
    they can run at scale — it comes second, never first. This is skilled, slow work, not a job
@@ -187,6 +213,21 @@ Each habit, and what it catches.
   are "it never saw it" — wrong page, or an old version. If something is missing, crop to
   that spot and retry; page size and resolution are often the real cause.
 
+**Before you trust a new document type, run this list once:**
+
+1. Checked labels together with their values, not just that the text appears on the page?
+2. Had code — not the model — redo any totals or ranges that must add up or stay in bounds?
+3. Confirmed the model's convention for "blank," and checked every response against it?
+4. Written the rule for faint signatures and checkboxes before looking at any results?
+5. Asked about document status — draft, watermark, struck-out edit — as its own question?
+6. Reviewed everything the reader had to guess, not only the parts that looked wrong?
+7. Counted the fields you expected, using the blank form as the checklist?
+8. Checked for loops and cutoffs, and confirmed long legitimate pages weren't binned as failures?
+9. Decided, in advance, exact copy or tidied-up version — and checked for the one you chose?
+10. For anything wrong, checked what the agent actually saw before assuming it invented the answer?
+
+Can't answer one yet? That's the next thing to test, not a reason to skip ahead.
+
 ## Two shapes of reader
 
 Products are built one of two ways, and it changes what they get wrong. Worth asking which one
@@ -265,6 +306,15 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   its small default image model it misread an entire chart, labels and durations both, and the
   same chart read with a larger image model plugged in came back with every value right — the
   clearest example here that the tool and the model inside it are different questions.
+- **Local-index readers (MinerU and similar)** — parses a PDF once and builds a local keyword
+  index, giving each passage an address (document, page, block) an agent can use later to fetch
+  just that passage instead of reloading the whole document into every prompt — tested by
+  retrieving one payment clause out of a 23-page financing agreement. On a table comparing two
+  similarly-named models, it merged both model names into one cell spanning both rows while
+  keeping their error rates in separate rows — importing those rows as written would attach the
+  same combined name to both results. The same table read with a table-rebuilding tool (Docling)
+  kept the two names apart. Treat a MinerU table with similar-looking row labels as a candidate
+  for the label-with-its-value check above.
 - **Document-specialist readers (Chandra and similar)** — best seen on messy and handwritten
   tables, and read a degraded declassified cable — first sentence and routing grid both — that
   a table-rebuilding tool mangled. On a handwritten crossed-out edit it returned both the
@@ -339,45 +389,63 @@ description describe different things. On another, the description calls Chandra
 annotator named Chandra" when it is a piece of software, and only the caption makes that clear.
 Where a caption and a description disagree, trust the caption.
 
-## OCR models on the market (October 2026)
+## OCR models on the market (October 2026) — unverified reference
 
-Three families of tools read documents. Each fits a different job.
+**Read this before the list below.** Everything from "Core principles" through "Tool notes"
+above ties back to a specific test in Isaac's posts. Nothing in this section does — it's a
+plain map of names and categories that exist on the market, written from general knowledge of
+the field, not from a test in the source material. Where a name below also has a real test
+behind it, that test lives in "Tool notes" or "Which pages are hard" above, and this section
+says so and points you there. Every other name here is **not tested here — unverified**: a name
+worth knowing, not a recommendation to act on. Before relying on any of them, run it through
+"The test-first method" above, exactly as you would a tool nobody had ever mentioned to you.
 
-**1. Document-specialist models.** Built only to read pages. Names: Mistral OCR,
+**1. Document-specialist models.** Built only to read pages. Names on the market: Mistral OCR,
 PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR.
-Best for: high page counts, tables, complex layouts. They are fast and cheap.
-Weak at: reasoning about what the page means, and some handwriting.
+- MinerU is tested in "Tool notes" above, including a table of two similarly-named models where
+  it merged both names into one cell while keeping their numbers separate — a real failure.
+- PaddleOCR-VL is tested once, in the post referenced under "Layout and location tools" in Tool
+  notes: compared against Datalab Accurate on whether a bounding region can follow angled,
+  warped text. That's a test of region shape, not reading accuracy — and it's a different
+  product from classic PaddleOCR, tested far more under "Cheap classical tools" in Tool notes.
+- olmOCR appears once in the source, named only as an example of why low-temperature settings
+  cause repetition loops — not as a tested reader.
+- Mistral OCR, GLM-OCR, DeepSeek-OCR, Nanonets OCR, and FireRed-OCR do not appear in the source
+  at all — not tested here — unverified.
 
-**2. General vision models.** Built for everything, strong on pages too. Names:
-GPT-5, Claude Sonnet, Gemini 3 Pro and Flash. Best for: hard pages, handwriting,
-messy scans, pages where you must reason. They cost more and run slower. They can
-invent text on bad scans — always verify against the page.
+**2. General vision models.** Built for everything, including reading pages. Names on the
+market: GPT-5, Claude Sonnet, Gemini 3 Pro and Flash. Gemini (the Flash variant) is the most
+heavily tested reader in this whole document — see "Which pages are hard" and "Tool notes" for
+specifics, both its best result (a handwritten name and all six checkboxes right on one bank
+form) and its failures (an invented copyright line, a "corrected" lab value). GPT-5 and Claude
+Sonnet do not appear in the source at all — not tested here — unverified. Qwen, an open-weight
+model not named in the original market list above but worth knowing, is the other most heavily
+tested model in this document — see the checkbox, map-label, and census-form entries elsewhere.
+InternVL does not appear in the source at all — not tested here — unverified.
 
-**3. Classic OCR services.** The old enterprise tools. Names: Azure Document
-Intelligence, AWS Textract, Google Document AI, Tesseract, EasyOCR. Best for:
-fixed forms (invoices, IDs, claims), jobs that need a confidence score per field,
-computers with no internet (Tesseract). Weak at: handwriting and complex layouts
-compared with the new models.
+**3. Classic OCR services.** Older enterprise tools. Names on the market: Azure Document
+Intelligence, AWS Textract, Google Document AI, Tesseract, EasyOCR. AWS Textract is tested in
+"Tool notes": strong on a big clean table, found only 3 of 4 faint signatures, dropped plus and
+minus signs from formulas. Tesseract is tested once, wrapped inside a tool called PDF-MCP: on a
+private 22-question benchmark, giving an agent direct CLI access scored slightly higher and ran
+faster than going through the wrapper — a test of that wrapper, not a ranking of Tesseract
+against other readers. Azure Document Intelligence, Google Document AI, and EasyOCR do not
+appear in the source at all — not tested here — unverified.
 
-**Best tool for what — the routing rule:**
-- Clean, high-volume documents (invoices, receipts, standard forms): start cheap.
-  Gemini Flash, Mistral OCR, or PaddleOCR-VL.
-- Tables and complex layouts: PaddleOCR-VL or GLM-OCR first.
-- Reading order matters (multi-column pages): DeepSeek-OCR reads in human order.
-- Handwriting: a frontier vision model (GPT-5, Claude). Classic OCR fails here.
-- Ambiguous pages or low confidence: escalate to the premium model (Claude Sonnet,
-  GPT-5, Gemini Pro). Keep this lane narrow — it is the expensive one.
-- Highest accuracy pattern in benchmarks: hybrid. Send both the OCR text and the
-  page image to the vision model. This cuts invented text.
-- Fixed forms with audit needs: Azure Document Intelligence, for its confidence
-  scores.
-- Free and local: Tesseract as the baseline; Qwen-VL and InternVL as open-weight
-  vision models.
+**What this section is not.** It is not a routing table, and nothing here should be read as
+"start with this one" — that's the exact shortcut the rest of this skill tells you not to take.
+If you need a starting point grounded in an actual test, use "Tool notes" above. If none of
+those fit your page type, treat the unverified names here as leads: write down what the product
+needs (test-first method, step 2), narrow to a small group of candidates, and test your own
+pages before anything — including this document — tells you which one wins. Public benchmarks
+for this market are close to saturated at the top, so a small score gap between vendors means
+little on its own — see "A leaderboard position is not information" in Core principles.
 
-**Caveats.** Benchmarks are close to saturated at the top — small score gaps mean
-little. Isaac's own side-by-side tests beat any vendor claim. Always test on your
-own pages before you commit. This section is dated October 2026. Refresh it when
-the weekly sync finds Isaac testing a new model.
+> **Note for whoever runs the weekly sync — not the reader.** This section is dated October 2026
+> and was written from general market knowledge, not from a test in Isaac's posts. If the sync
+> finds Isaac testing one of the "not tested here" names above, move that result into "Tool
+> notes" with the test attached, rather than updating the claim here. Otherwise this section only
+> needs attention when the list of names on the market goes stale.
 
 ## Post transcripts
 
