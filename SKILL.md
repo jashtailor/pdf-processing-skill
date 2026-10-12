@@ -338,3 +338,51 @@ The descriptions themselves make mistakes worth knowing about. On one post the c
 description describe different things. On another, the description calls Chandra "a human
 annotator named Chandra" when it is a piece of software, and only the caption makes that clear.
 Where a caption and a description disagree, trust the caption.
+
+## OCR models on the market (October 2026)
+
+Three families of tools read documents. Each fits a different job.
+
+**1. Document-specialist models.** Built only to read pages. Names: Mistral OCR,
+PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR.
+Best for: high page counts, tables, complex layouts. They are fast and cheap.
+Weak at: reasoning about what the page means, and some handwriting.
+
+**2. General vision models.** Built for everything, strong on pages too. Names:
+GPT-5, Claude Sonnet, Gemini 3 Pro and Flash. Best for: hard pages, handwriting,
+messy scans, pages where you must reason. They cost more and run slower. They can
+invent text on bad scans — always verify against the page.
+
+**3. Classic OCR services.** The old enterprise tools. Names: Azure Document
+Intelligence, AWS Textract, Google Document AI, Tesseract, EasyOCR. Best for:
+fixed forms (invoices, IDs, claims), jobs that need a confidence score per field,
+computers with no internet (Tesseract). Weak at: handwriting and complex layouts
+compared with the new models.
+
+**Best tool for what — the routing rule:**
+- Clean, high-volume documents (invoices, receipts, standard forms): start cheap.
+  Gemini Flash, Mistral OCR, or PaddleOCR-VL.
+- Tables and complex layouts: PaddleOCR-VL or GLM-OCR first.
+- Reading order matters (multi-column pages): DeepSeek-OCR reads in human order.
+- Handwriting: a frontier vision model (GPT-5, Claude). Classic OCR fails here.
+- Ambiguous pages or low confidence: escalate to the premium model (Claude Sonnet,
+  GPT-5, Gemini Pro). Keep this lane narrow — it is the expensive one.
+- Highest accuracy pattern in benchmarks: hybrid. Send both the OCR text and the
+  page image to the vision model. This cuts invented text.
+- Fixed forms with audit needs: Azure Document Intelligence, for its confidence
+  scores.
+- Free and local: Tesseract as the baseline; Qwen-VL and InternVL as open-weight
+  vision models.
+
+**Caveats.** Benchmarks are close to saturated at the top — small score gaps mean
+little. Isaac's own side-by-side tests beat any vendor claim. Always test on your
+own pages before you commit. This section is dated October 2026. Refresh it when
+the weekly sync finds Isaac testing a new model.
+
+## Post transcripts
+
+Every collected post is transcribed in full in TRANSCRIPTS.md, in the same folder
+as this file: caption plus the automated visual description, oldest first. The
+weekly sync appends new posts there. 26 posts have captions only — the description
+service returned nothing, so what was on screen is lost. Two stories have neither
+caption nor description. Where caption and description disagree, trust the caption.
