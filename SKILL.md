@@ -127,7 +127,9 @@ they're a setting or an instruction you choose inside the product you already us
    licensing and hosting questions to an engineer before anything ships.
 7. **Decide where failures go** — re-read the page, send only the failed fields to a
    different reader, or route the document to a person. Readers disagreeing with each other is
-   a good trigger for that last route, even when you cannot say which one is wrong.
+   a good trigger for that last route, even when you cannot say which one is wrong. When several
+   readers disagree, try an automated repair pass and re-check agreement before sending to a
+   person — but still send it if agreement stays low.
 8. **Read a sample of the ones that passed.** Automatic checks only catch mistakes you
    already thought of. This is the step everyone skips.
 9. **Rerun your baseline when the scoring changes** — numbers from two versions of a scoring
@@ -189,7 +191,10 @@ Each habit, and what it catches.
 - **Check whether the output looped or got cut off.** *Catches* a page silently thrown away,
   and a block of invented repeats. Readers built on image models are prone to repeating
   themselves: they are run at a low randomness setting because that transcribes more
-  accurately, and the price is that they can get stuck copying a block they already wrote. The
+  accurately, and the price is that they can get stuck copying a block they already wrote. This
+  is a tradeoff, not a bug to simply disable — the same low-randomness setting that makes OCR
+  accurate is what makes it prone to getting stuck, so ask an engineer to tune it, not turn it
+  off. The
   repeats are not always obvious — one case repeated a whole table section at a time, another
   counted up as it went (S10, S11, S12), and both slipped past the product's own loop
   detector. The usual safety net is a cap on output length, and the cap is where your pages go
@@ -232,6 +237,14 @@ Can't answer one yet? That's the next thing to test, not a reason to skip ahead.
 
 Products are built one of two ways, and it changes what they get wrong. Worth asking which one
 you are buying.
+
+**What you need narrows you to a group — use this to pick a starting point:**
+
+- Need to click through from an answer back to the exact spot on the page → layout and location tools.
+- Need to pull one passage out of a large file, not read the whole thing → local-index readers.
+- One-off page, messy or varied, and you just need it read once → a single whole-page model.
+- The same layout, over and over, at volume → a chain of specialists.
+- Colour on the page carries meaning (a grey cell, a highlighted row) → colour-aware extraction.
 
 - **One model reads the whole page.** It sees the picture, the caption and the table at the
   same time, so it can work out that "as you can see, the tallest bar" points at the third row.
@@ -359,9 +372,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   one file into separate documents. Good scoping ideas for construction and intake paperwork.
 - **Routers that decide when to spend the expensive reader** (Reducto and similar) — run the
   fast and the slow reader side by side during evaluation, measure the score gain and the extra
-  seconds on each page, and predict from that whether the big one is worth calling. The point
-  for you is the measurement, not the machinery. The tool pair used to illustrate it was the
-  source's own example, not the vendor's.
+  seconds on each page, and predict from that whether the big one is worth calling. A simple
+  version: record each page's confidence score and word count, run both the cheap and the
+  expensive reader, and use those two numbers to predict whether the accuracy gain is worth the
+  extra time — before building anything fancier. The point for you is the measurement, not the
+  machinery. The tool pair used to illustrate it was the source's own example, not the vendor's.
 - **Agent-driven readers** are arriving, billed as accurate on genuinely hard pages, slowly and
   expensively. Worth testing on your worst pages only.
 - **To pass to an engineer, not act on:** at least one widely used Python PDF library carries a
