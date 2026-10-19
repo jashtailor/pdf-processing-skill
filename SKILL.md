@@ -93,6 +93,12 @@ they're a setting or an instruction you choose inside the product you already us
   3–4x faster than Cost Effective with no accuracy difference on the same pages, just more
   credits per page; a separate, slower "Agentic" tier existed for the hard documents that need it.
   Picking the mode is often the fix, not switching vendors.
+- **For charts, pick the shape by the question you're answering, not by whatever the pipeline
+  defaults to.** A plain-text description ("productivity trending up over the period") is
+  enough for search. Pulling the underlying numbers into a table or CSV is what answers a
+  specific numerical question. Redrawing the chart as an editable vector (SVG, Mermaid) only
+  matters if you need to edit or reuse the drawing itself. These are three different requests to
+  the same tool — ask for the one that matches what you actually need.
 
 ## The test-first method
 
@@ -293,6 +299,7 @@ sensible order.
 |---|---|---|
 | Large, clean, flat table | Easy | Size alone isn't difficulty — a clean 33-row table came out whole |
 | Any table read as plain text | Medium | The numbers survive, the row-and-column relationships don't |
+| Well-aligned text mistaken for a table | Medium | A converter sees alignment, not meaning — a paper's title and abstract rebuilt as fabricated tables |
 | Merged or nested table | Hard | Rows attach to the wrong group; a heading repeats onto every row or swallows a value |
 | Wide table with formulas | Hard | Plus and minus signs dropped; one misread header collapsed the whole grid |
 | Scan with no text stored in the file | Hard | Plain text extraction returns nothing at all |
@@ -322,6 +329,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 
 - **Plain text pulled from the PDF** — keeps the words, loses table structure, watermarks and
   strikethroughs; returns nothing on a scan with no stored text.
+- **General markdown converters (MarkItDown and similar)** — not built specifically for scanned
+  or structured documents; not an OCR engine. Seen turning a research paper's title and abstract
+  into a fabricated multi-cell table, because it treats any well-aligned block of text as a
+  table instead of checking whether it actually is one. Alignment is not evidence of a table —
+  worth checking for on your own documents before trusting a converter's table output.
 - **Table-rebuilding tools (Docling and similar)** — strong on clean tables, fast and cheap;
   seen repeating headings, shifting a value into a header, missing a draft watermark — though
   duplicating a header across every column it spans is also how it corrects a merged column
@@ -349,6 +361,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   a table-rebuilding tool mangled. On a handwritten crossed-out edit it returned both the
   deleted and the inserted word but never marked which was which, and on another page it
   quietly corrected a printed typo; broke badly on a dense grid form.
+- **LightOnOCR** — newly released and still being evaluated generally. On a census table with a
+  merged cell spanning two columns (6.9% for high-growth counties, 2.2% for low-growth), it
+  returned each number under the right group with the merge intact; a table-rebuilding tool
+  (Docling) duplicated both numbers into all four cells and lost which group they belonged to.
+  One good sign on one page, not a verdict on the model.
 - **General image-reading models (Gemini and similar)** — the only reader to get a handwritten
   name and all six checkboxes right on one bank form, and the most expensive tried; also seen
   misreading a digit, tidying a printed value, returning a Markdown table with a merged column
@@ -435,7 +452,7 @@ worth knowing, not a recommendation to act on. Before relying on any of them, ru
 "The test-first method" above, exactly as you would a tool nobody had ever mentioned to you.
 
 **1. Document-specialist models.** Built only to read pages. Names on the market: Mistral OCR,
-PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR.
+PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR, LightOnOCR.
 - MinerU is tested in "Tool notes" above, including a table of two similarly-named models where
   it merged both names into one cell while keeping their numbers separate — a real failure.
 - PaddleOCR-VL is tested once, in the post referenced under "Layout and location tools" in Tool
@@ -444,6 +461,10 @@ PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR.
   product from classic PaddleOCR, tested far more under "Cheap classical tools" in Tool notes.
 - olmOCR appears once in the source, named only as an example of why low-temperature settings
   cause repetition loops — not as a tested reader.
+- LightOnOCR is tested once, in "Tool notes" above: on a census table with a value merged across
+  two columns, it kept each number under its own group while a table-rebuilding tool (Docling)
+  duplicated both numbers into all four cells. Isaac was still evaluating it generally when he
+  posted this — one good sign on one page, not a verdict on the model.
 - Mistral OCR, GLM-OCR, DeepSeek-OCR, Nanonets OCR, and FireRed-OCR do not appear in the source
   at all — not tested here — unverified.
 

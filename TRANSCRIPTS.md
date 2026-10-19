@@ -3760,3 +3760,207 @@ A presenter in a blue shirt and glasses explains how he used OCR to extract data
 **Caption:** [no caption]
 
 **On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
+<!-- file: 2026-10-12-DeZgZk7AhlR.md -->
+### Reading complex layouts or columns straight across can split two different paragraphs into
+
+- Date: 2026-10-12 08:01:29
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DeZgZk7AhlR/
+
+**Caption:** Reading complex layouts or columns straight across can split two different paragraphs into one sentence. PP-DocLayoutV3 takes a page image, finds blocks such as paragraphs and tables, and puts them in reading order. The Paddle team trained V3 to find the blocks and put them in order in one model.
+
+Comment PDF and I’ll send you the course details.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter with glasses and a gray shirt speaks into a microphone in front of paintings, explaining a 'New model for reading order' for complex PDF layouts. He describes how PP-DocLayoutV3 takes a page image, finds blocks like paragraphs and tables, and reads them in a unique way—processing one column at a time from top to bottom before moving to the next column, rather than sorting by height alone. He illustrates that instead of using two separate models to find blocks and then order them, the Paddle team trained V3 to do both in one model using pairwise comparisons between blocks, which can run in parallel and sum estimates to determine order. He shows benchmark results from OmniDocBench v1.5 comparing 'Decoupled' versus 'Coupled' training, noting the coupled model made fewer ordering mistakes (RO score 0.041 vs 0.189). The video concludes with a call to action to comment 'PDF' for information about his upcoming course covering the full workflow from evaluating OCR to deploying your pipeline in production.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-12-DeZuJoKj7Wg.md -->
+### Microsoft’s MarkItDown has 190,000 GitHub stars and its MCP server is extremely popular, b
+
+- Date: 2026-10-12 10:01:36
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DeZuJoKj7Wg/
+
+**Caption:** Microsoft’s MarkItDown has 190,000 GitHub stars and its MCP server is extremely popular, but I actually think it’s pretty bad as a general solution. Its PDF converter turns the title of this research paper into a table. Just because text is aligned does not mean it’s a table. Run it on several of your actual documents and look at the outputs.
+
+Comment EVALS and I’ll send you both document evals guides.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A male presenter with glasses speaks directly to camera about Microsoft's open-source tool MarkItDown, which has over 190,000 GitHub stars and is marketed as an MCP server for document conversion. He argues it is 'pretty bad as a general solution' because its PDF converter aggressively tries to recover tables. Using the BERT research paper as an example, he shows how the tool converts the paper's title ('BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding') into a multi-cell table, splitting phrases like 'Pre-training' and 'of Deep' into separate cells, and also breaks the abstract into multiple nested tables. He explains this happens because MarkItDown groups words by repeated alignments rather than semantic structure, so any well-aligned document gets treated as a table. He warns this leads to 'garbage in, garbage out' for AI systems — more tokens, higher cost, and lower accuracy — and advises viewers to test MarkItDown on their own actual documents before adopting it. At the end, now wearing a dark blue shirt, he promotes a free guide on how to evaluate OCR models and turn results into repeatable tests, asking viewers to comment 'EVALS' to receive it.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-13-DecFKG8CXD-.md -->
+### When a tool reads a PDF one page or a few pages at a time, it can mistake a section headin
+
+- Date: 2026-10-13 08:01:07
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DecFKG8CXD-/
+
+**Caption:** When a tool reads a PDF one page or a few pages at a time, it can mistake a section heading for the title of the whole document because it’s missing that context. MinerU-Popo works out which parts belong together, even across many pages. The goal is to let you search for a section and get its tables and images as well.
+
+Comment PDF and I’ll send you the course details.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter with glasses and a microphone explains a problem in PDF OCR processing called 'cross-page OCR structure.' He describes how tools that read a PDF one page at a time often miss the overall document title or section heading because they lack context from prior pages. He introduces 'MinerU-Popo' as a new paper that takes text, tables, and images pulled by an OCR tool and works out which parts belong together across many pages. Using diagrams, he illustrates how individual pages processed in isolation lose hierarchy—for example, an H1 on page 10 might be mistaken for the main title instead of being recognized as nested under an earlier H1. The system also handles table fragments that continue across page breaks, deciding whether boundary cells should merge, and associates figures with different captions and sections. The goal is to produce one complete document tree for retrieval, giving a section with all its supporting material instead of disconnected fragments. At the end, now wearing a dark shirt, he promotes his full workflow course covering OCR evaluation to production deployment, inviting viewers to comment 'PDF' for the syllabus.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-13-DecS5IkjwSA.md -->
+### PaddleOCR reads the dollar amounts in this IRS example, but it mixes up what years they go
+
+- Date: 2026-10-13 10:01:19
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DecS5IkjwSA/
+
+**Caption:** PaddleOCR reads the dollar amounts in this IRS example, but it mixes up what years they go with. It read all 3 amounts, so just checking the numbers wouldn’t catch the error. This doesn’t mean PaddleOCR is bad, Docling is good. You need to run your specific data on the models and see if the outputs match your use case.
+
+Comment PDF and I’ll send you the course details.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter with glasses speaks into a microphone while showing screen captures of an IRS depreciation table. He demonstrates how PaddleOCR misreads the table: it loses the 'Year' labels, leaving the first two years blank and combining them as '2nd .... 3rd', and then incorrectly associates the deduction amounts ($2,033, $2,564, $2,564) with the wrong rows. He notes this happens because the OCR only reads numbers without context. He then shows that exporting the PDF at higher resolution and running it through Paddle's hosted demo improves results — the table structure is preserved with correct headers for Year, Basis, Percentage, and Deduction. However, he points out remaining inconsistencies like leading dollar signs and trailing periods that require post-processing to normalize. He concludes that PaddleOCR is a useful tool but users must validate outputs against their specific data, and promotes his upcoming 'PDF to Production' course covering the full workflow from evaluation to deployment.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-14-Dee3tSjD1v4.md -->
+### Docling OCR duplicated two numbers across the census table and lost which group each numbe
+
+- Date: 2026-10-14 10:01:18
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/Dee3tSjD1v4/
+
+**Caption:** Docling OCR duplicated two numbers across the census table and lost which group each number goes to. It repeated both 6.9 and 2.2 in all 4 cells. LightOnOCR returned each value under the right group with merged cells. I’m still evaluating the new LightOn model, so TBD on how it holds up generally, but this is a really good sign.
+
+Comment OCR and I’ll send you both OCR articles.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter in glasses and a gray shirt explains a specific failure of the Docling OCR tool when processing a research table titled 'Mean County Characteristics by Growth in Bachelor's Degree Attainment, 2005-2019.' The table compares High-Growth Counties versus Low-Growth Counties across two time periods (2005-2009 and 2015-2019). The key row shows a percentage point change of 6.9% for high-growth counties and 2.2% for low-growth counties, with each value spanning two columns because the cells are merged. Docling incorrectly duplicates both numbers into all four data cells instead of preserving the merge. The presenter then demonstrates Lighton OCR, which correctly returns 6.9% under High-Growth and 2.2% under Low-Growth while keeping the merged-cell structure intact. He notes he is still evaluating the new Lighton model but highlights this example as a positive sign, and ends by inviting viewers to comment 'OCR' for more information on handling messy scans, tables, and handwriting.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-14-Deep9bMlBWM.md -->
+### There are 3 ways to OCR charts. You can describe it, extract it, or draw it, like with an
+
+- Date: 2026-10-14 08:01:11
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/Deep9bMlBWM/
+
+**Caption:** There are 3 ways to OCR charts. You can describe it, extract it, or draw it, like with an SVG or a Mermaid diagram. Which you need depends on the application. Describing the chart is really helpful for search. For specific numerical questions, I need the actual numbers. If I need to edit or reuse the drawing, I may want an SVG.
+
+Comment PDF and I’ll send you the course details.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter with glasses and a microphone explains '3 ways to OCR a chart' using an example line chart titled 'Weekly Technology Metrics Analysis' that tracks Productivity, User Engagement, and System Stability over 28 weeks. He outlines the first method — describing the chart in text (e.g., noting productivity fluctuates 0.6–0.9, engagement rises ~0.3 to ~0.95, stability declines ~0.85 to ~0.4) — which is useful for search and mixed-breadth retrieval. The second method is extracting the underlying data into a table/CSV, demonstrated by asking Gemini Flash for values, which provides estimated numbers good for answering specific numerical questions or loading into code. The third method is reconstructing the visual as an editable vector graphic like SVG or Mermaid, allowing display and editing of lines and labels. He advises choosing the approach based on the end goal rather than just extracting from a PDF, and promotes an upcoming course covering the full workflow from evaluating OCR to deploying to production, inviting viewers to comment 'PDF' for details.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-15-DehO0rEnW5e.md -->
+### Perplexity released a new embedding model that lets you index documents with a large model
+
+- Date: 2026-10-15 08:02:26
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DehO0rEnW5e/
+
+**Caption:** Perplexity released a new embedding model that lets you index documents with a large model but search them with a really fast one. Normally you index PDFs for search in advance once. The big slow model is worth it because the user is not waiting. Then you can use the small model for queries where users are waiting for results.
+
+Comment PDF and I’ll send you the course details.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter explains Perplexity's new 'two models for faster search' embedding system. He describes using a large 9B model to pre-compute ('ahead of time') embeddings for all indexed Pages, saving them as 'Saved page embeddings.' At query time, instead of using the slow large model, a small 0.6B model generates 'Query embeddings' quickly and cheaply, which are then compared to the saved document embeddings. To make this work, both models were trained via distillation on a 18B 'Teacher' model — feeding the same query or page text into all three and forcing the Large and Small embeddings to match the Teacher's target embeddings. In practice, using Large-for-documents and Small-for-queries achieves 92.4% accuracy (matching the Large-only baseline) versus 90.1% when using the Small model for both, effectively halving the error rate without heavy compute at search time. The small model is also designed to run on devices. The presenter notes he covers the full workflow from evaluating OCR to deploying pipelines in an upcoming PDF.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-16-DejzpAWD1nD.md -->
+### Overall scores don’t tell you how a parser handles your tables. Datalab’s OmniParseBench g
+
+- Date: 2026-10-16 08:02:38
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DejzpAWD1nD/
+
+**Caption:** Overall scores don’t tell you how a parser handles your tables. Datalab’s OmniParseBench gives you separate scores for tables, handwritten, and even handwritten tables. Separate scores are a step in the right direction, but you still need to look at the pages and see whether they look like your documents.
+
+Comment EVALS and I’ll send you both document evals guides.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter in glasses and a grey shirt speaks into a microphone about 'Omni Parse Bench,' a new benchmark released by DataLab for testing document parsers. He explains that traditional leaderboards give one overall OCR score, which is misleading because nobody parses an average document — performance varies by document type like tables, handwritten text, and layout. He shows graphics illustrating separate scores for text, tables, and handwritten content, and walks through an example from a medical paper showing a 'Tumor site' table. He describes how the benchmark includes specific tests, such as checking that the number '32 (40.0)' appears under the correct 'Lower limb / High' cell, so users can see exactly where a parser fails. He notes DataLab's own parser scored highest on accuracy but costs more, though they offer a 25% discount for allowing training data use. He praises the granularity but wishes the initial release showed more examples of complex tables (headers, multi-page structures), warning that high scores can mask failures on broken-down tables. He recommends viewers use a simple agent app to download the benchmark dataset and run their own side-by-side tests on documents similar to their workflow, rather than relying solely on published scores. The video ends with a call-to-action offering a 'FREE EVALS GUIDE' for commenting 'EVALS.'
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-18-story-4010845004294383413.md -->
+### story story-4010845004294383413
+
+- Date: 2026-10-18 12:00:13
+- Type: story
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/stories/isaac_flath/4010845004294383413
+
+**Caption:** [no caption]
+
+**On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
+
