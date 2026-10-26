@@ -3964,3 +3964,194 @@ A presenter in glasses and a grey shirt speaks into a microphone about 'Omni Par
 
 **On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
 
+<!-- file: 2026-10-19-Der2gjzlV-l.md -->
+### The values for Texas poverty end up in the row for Utah in Docling’s OCR output.
+
+- Date: 2026-10-19 11:00:58
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/Der2gjzlV-l/
+
+**Caption:** The values for Texas poverty end up in the row for Utah in Docling’s OCR output.
+
+Comment PDF for the course details.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A man with glasses speaks directly to camera in front of paintings, explaining a specific OCR failure. He shows a table of U.S. state poverty numbers and points out that 'Texas values end up in the row for Utah' in Docling's OCR output. The correct data is 3,718 (thousand) for Texas and 231 (thousand) for Utah, but the OCR merges both numbers into Utah's cell while leaving Texas blank. He notes this would cause any agent using the data to report Texas's numbers as Utah's. He describes attempted fixes like splitting cells as 'incredibly difficult and very brittle,' and recommends a VLM called Chandra which keeps the Texas and Utah rows separate. He then promotes an upcoming 'PDF to Production' course with Joe Barrow, covering OCR selection, error analysis, observability, deployment, and vendor options, asking viewers to comment 'PDF.' The tone is instructional and technical.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-20-DeubTjbAdza.md -->
+### Chandra reads these numbers correctly, but it shifts the headers around. The annual figure
+
+- Date: 2026-10-20 11:00:46
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DeubTjbAdza/
+
+**Caption:** Chandra reads these numbers correctly, but it shifts the headers around. The annual figure, 744.7, ends up under Q1.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter in a dark shirt and glasses speaks into a microphone while displaying screenshots of a financial table with years and quarters (2023, 2024, Q1-Q4, 2025). He explains that '2024 appears twice' in the Fed table — once for the annual total and once above the four quarterly columns — which causes problems for OCR and software agents trying to extract it correctly. He demonstrates how a VLM called Chandra reads the numbers accurately but shifts the headers: the annual figure 744.7 ends up under the Q1 header, the 2024 header spans only two columns instead of four, so Q3 and Q4 of 2024 are mislabeled as 2025, and 2025 Q1/Q2 get no year label. He notes this malformed output could be caught by a column check because the data rows have more columns than the header rows. In contrast, he shows that on the same page, Gemini 3.5 Flash gets all the headers correct and matches them properly, proving the page can be extracted well.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-21-DexAHiZAjTP.md -->
+### You need the temperature to know which limit applies, but Gemini Flash with a generic OCR
+
+- Date: 2026-10-21 11:00:51
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DexAHiZAjTP/
+
+**Caption:** You need the temperature to know which limit applies, but Gemini Flash with a generic OCR prompt left out the 25°C condition.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A man with glasses wearing a dark long-sleeve shirt speaks directly to camera in front of a microphone, explaining a technical issue with optical character recognition (OCR) of electronics datasheets. The top half of the screen displays a Texas Instruments datasheet for the LM358B/LM358BA showing '5.5 Electrical Characteristics,' highlighting that the input offset voltage limit is ±3.0 mV at TA = 25°C, and ±4 mV across the full temperature range of -40°C to +85°C. He explains that while the chip has different error standards depending on temperature, an AI tool called Gemini extracts the error limits but fails to include the temperature condition for all entries, leaving 'test_conditions': null in the JSON output. He notes this is critical because you must know which limit applies, and shows that by correcting the prompt he was able to get the proper output including 'temperature': '25°C'. The tone is educational and instructional, aimed at engineers working with parts lists.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-22-Dezk6tWCALQ.md -->
+### Docling puts this drug table into Markdown, which doesn’t handle spanned rows. One of the
+
+- Date: 2026-10-22 11:01:11
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/Dezk6tWCALQ/
+
+**Caption:** Docling puts this drug table into Markdown, which doesn’t handle spanned rows. One of the longer headers splits into a second cell.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter discusses why OCR often struggles with a specific drug adverse-events table. He shows Table 1 from a GOPRELTO clinical study, noting that each system organ class (e.g., Nervous System Disorders, Respiratory, Thoracic, and Mediastinal Disorders) uses a merged cell spanning four columns. When tools like Docling convert this to Markdown—which does not support row spans—they place the merged label in the first cell. That usually works, but for longer headers like 'Respiratory, Thoracic, and Mediastinal Disorders,' the word 'Disorders' gets split into a second cell, creating an edge case. Any software processing the table must detect and handle this stray text before performing numeric calculations, because you cannot reliably parse values like '7 (3%)' when non-numeric text appears in the same column. He notes that vision-language models outputting HTML typically preserve the merged structure correctly, keeping headings together as intended.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-22-Dezw6fQi_Lp.md -->
+### A wrong answer tells you your document AI system failed, not where the fix should be.
+
+- Date: 2026-10-22 12:52:40
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/Dezw6fQi_Lp/
+
+**Caption:** A wrong answer tells you your document AI system failed, not where the fix should be.
+
+Summative evals check whether the full system completes the task. Formative evals help you improve individual steps faster and more cheaply. You need both.
+
+In this full walkthrough, I work through three examples:
+• A misread financial subtotal
+• A missing medical record
+• A sink counted twice across floor plans
+
+Start with the failed user task, trace the error back through the system, and build a smaller test for the step that broke.
+
+My PDF to Production course: isaacflath.com/pdf2production
+
+**On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
+
+<!-- file: 2026-10-23-De2JscdFOb7.md -->
+### Docling’s OCR puts all the findings in this table under the wrong group.
+
+- Date: 2026-10-23 11:00:40
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/De2JscdFOb7/
+
+**Caption:** Docling’s OCR puts all the findings in this table under the wrong group.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A man with glasses and a dark shirt speaks into a microphone while displaying slides from a research poster titled 'State-Level Analysis of Living Arrangements of Grandparents and Grandchildren and Excess Mortality During the COVID-19 Pandemic.' He explains that Docling's OCR incorrectly mixes up the groups in Table 1 (OLS Regression Results). Instead of keeping the findings under their correct headings — 'Grandparents living with grandchildren,' 'Grandparents responsible for grandchildren,' and 'Grandparents responsible for grandchildren for less than 1 year' — the OCR places all bullet-point results under the last heading. He demonstrates that cropping the poster to show only Table 1 allows Docling to read it correctly with each group getting its own findings. He concludes that for complex documents like this, a routing step to identify components before sending them to the appropriate model or pipeline is usually the best approach. The presentation is technical, focused on document processing accuracy.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-24-De4uhojTUlJ.md -->
+### For 2020, the income estimate is $67,521. Tesseract returns 129,931 for the entire first r
+
+- Date: 2026-10-24 11:01:20
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/De4uhojTUlJ/
+
+**Caption:** For 2020, the income estimate is $67,521. Tesseract returns 129,931 for the entire first row, and all the other values for 2020 are gone.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter wearing glasses and a dark shirt speaks into a microphone while demonstrating an OCR problem using a Census Bureau table showing household numbers and current-dollar income estimates by year. He explains that doing OCR on a dense table with merged header cells is tricky, using the 2020 row as an example where the median household income estimate is $67,521. He shows that running the image through Tesseract only returns '129,931' for the entire first row and drops all other 2020 values, then continues with 2019 data, illustrating missing data. He contrasts this with Datalab's OCR vendor API, which correctly keeps the full 2020 row including the $67,521 income figure. He concludes by noting the choice between hosting locally and using a vendor solution can be tricky — vendor solutions tend to be more expensive if engineering costs are assumed zero, but evaluating which vendor fits your data is also time-consuming.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-25-De7TUghAb1_.md -->
+### Column 6 should subtract columns 1 and 2 from column 5. AWS Textract returns 5, 1, and 2 a
+
+- Date: 2026-10-25 11:00:59
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/De7TUghAb1_/
+
+**Caption:** Column 6 should subtract columns 1 and 2 from column 5. AWS Textract returns 5, 1, and 2 after the equal sign with no operators.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter with glasses speaks into a microphone while showing a financial tariff table on screen. He explains that the table includes a formula labeled '(6) = (5) - (1) - (2)' for calculating C-Factor Over/(Under) Recovery. He demonstrates that AWS Textract incorrectly extracts this formula by dropping the minus signs, returning '5, 1, and 2 after the equal sign with no operators.' In contrast, he notes that other tools like Docling, VLMs, Gemini 3.5 Flash, and Chandra preserve the full formula. Using April's data, he shows the correct calculation yields $566,589, which matches the value in the original PDF. He concludes that these types of verifiable calculations make excellent evaluation datasets to confirm that extracted values are read properly and make sense together.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-25-story-4015918480944785013.md -->
+### story story-4015918480944785013
+
+- Date: 2026-10-25 12:00:22
+- Type: story
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/stories/isaac_flath/4015918480944785013
+
+**Caption:** [no caption]
+
+**On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
+

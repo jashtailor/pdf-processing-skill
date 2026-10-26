@@ -5,7 +5,7 @@ description: Practical craft for setting up and testing document-extraction agen
 
 # Getting information out of documents, reliably
 
-Distilled from 154 posts collected from Isaac Flath (@isaac_flath), mostly June–October 2026.
+Distilled from 172 posts collected from Isaac Flath (@isaac_flath), mostly June–October 2026.
 See "Where this comes from" for what the source misses.
 
 ## When to use this
@@ -63,6 +63,27 @@ can ask an engineer.
   its small default image model, misread every label and duration on a chart; the same tool
   with a larger image model read all six values correctly. Before you write a tool off, find
   out whether that part is a setting you can change.
+- **A wrong answer tells you the system failed, not where to fix it.** Two kinds of test do
+  two different jobs: one checks whether the whole system finished the user's task, the other
+  checks a single step on its own so you can improve that step faster and more cheaply. You
+  need both. When the whole-system test fails — Isaac's three examples are a misread financial
+  subtotal, a missing medical record, and a sink counted twice across floor plans — start from
+  the task that failed, trace the error back through the system to the step that broke, and
+  build a smaller test for just that step. (This one is from a caption only; the walkthrough
+  itself was not captured, so the three examples are named here, not shown.)
+- **When a reader mangles the layout, change the reader or cut the page down — don't patch the
+  output.** A table-rebuilding tool merged one state's poverty figure into the next state's
+  row and left the first row blank; Isaac calls unpicking that afterwards by splitting cells
+  "incredibly difficult and very brittle," and a different reader kept the two rows apart. On a
+  conference poster whose table came back with every finding filed under the last of three
+  headings, cropping the page down to just that table made the *same* reader read it correctly.
+  His standing advice for a page carrying several different things at once is a step that
+  identifies the pieces first and sends each to the reader that suits it, rather than one pass
+  over the whole sheet.
+- **A second reader succeeding on the same page tells you the page is fine and the reader
+  isn't.** On a Fed table that slid one reader's headings out of place, another read every
+  heading correctly — which settles the question of whether the page can be extracted at all,
+  and stops you redesigning around a difficulty that isn't there.
 - **You cannot tell whether a change to your instructions helped by reading the instructions.**
   Two people ran the same question through a carefully written instruction, a stripped-down
   version of it, and no instruction at all. The answers were all over the place, and no
@@ -84,7 +105,14 @@ they're a setting or an instruction you choose inside the product you already us
 - **"HTML instead of plain text" exists to fix one specific thing: a heading that spans more
   than one column.** Plain text and plain Markdown tables can only put a heading over a single
   column. HTML can say "this heading covers four columns," which is why it survives a
-  merged-heading table that plain text flattens into a misaligned row.
+  merged-heading table that plain text flattens into a misaligned row. The clearest example:
+  on a drug side-effects table where each body-system heading was one merged cell across four
+  columns, a table-rebuilding tool writing Markdown dropped each heading into the first cell —
+  which mostly works, until the heading is long. "Respiratory, Thoracic, and Mediastinal
+  Disorders" split, and the word "Disorders" landed in the second cell, which is a numbers
+  column. Stray text in a numbers column breaks any arithmetic you do on it; you cannot add up
+  "7 (3%)" and "Disorders". Readers asked for HTML kept the merged heading whole. If you can't
+  get HTML, the stray text has to be found and removed before any calculation — ask an engineer.
 - **A new output shape is still a change — test it like one.** Run it through your test set
   before you trust that "structured" fixed anything; don't just take the setting's word for it.
 - **Look for a speed/cost tier setting too, before deciding a tool is too slow or expensive.**
@@ -120,6 +148,13 @@ they're a setting or an instruction you choose inside the product you already us
    - **After that, growing the set means adding, not re-collecting.** Add a few pages whenever a
      new document type, vendor, or edge case shows up in real use. It's an ongoing habit attached
      to normal work, not a second scheduled collection effort — the set is never really finished.
+   - **Grab any page that checks itself.** A page that states its own arithmetic is worth more in
+     a test set than a page you can only grade field by field, because redoing the sum tells you
+     both that the values were read right and that they still make sense together. Isaac's example
+     is a tariff table printing its own column rule, "(6) = (5) - (1) - (2)": redo it on April's
+     figures and you get $566,589, which is the number printed on the page. Subtotals, cross-foots
+     and any printed formula do the same job. He calls these excellent evaluation data, and they
+     cost you nothing to label.
 4. **Have people write the right answers down first**, field by field. That human-labelled
    set *is* the test. An automatic scorer, AI grader included, only copies those judgments so
    they can run at scale — it comes second, never first. This is skilled, slow work, not a job
@@ -136,7 +171,10 @@ they're a setting or an instruction you choose inside the product you already us
    not just as one average. That per-page gap is what tells you which pages actually need the
    expensive reader, and it is usually smaller than expected. Put it as a question anyone can
    answer: is five more points of accuracy worth three more seconds on this page? Send
-   licensing and hosting questions to an engineer before anything ships.
+   licensing and hosting questions to an engineer before anything ships. Run-it-yourself versus
+   buy-a-vendor is not just the invoice, either: a vendor only looks dearer if you price your own
+   engineering time at zero, and working out which vendor actually fits your pages costs real time
+   too. Isaac describes that call as genuinely tricky rather than obvious in either direction.
 7. **Decide where failures go** — re-read the page, send only the failed fields to a
    different reader, or route the document to a person. Readers disagreeing with each other is
    a good trigger for that last route, even when you cannot say which one is wrong. When several
@@ -161,6 +199,15 @@ Each habit, and what it catches.
   manufacturer field came back as `BSM` instead of `B & W`, placed *before* its own label;
   "does this text appear on the page" passed. Check whole rows the same way — a value that
   drifted out of its cell still exists somewhere.
+- **Ask for the condition a value depends on as its own field.** *Catches* a correct number
+  that means nothing on its own. A chip datasheet gave the allowed error as ±3.0 mV at 25°C and
+  ±4 mV across −40°C to +85°C. A general image model, given a plain "read this page"
+  instruction, returned both limits with the temperature condition left empty — so nothing in
+  the output said which limit applied. Naming the condition in the instruction got it back.
+  Wherever a value on your pages is only valid under a stated condition — a temperature, an
+  effective date, a tier, a unit, a measurement basis — put that condition in your field list
+  rather than hoping it travels with the number. Then check it the way you'd check any other
+  field: this one came back empty without complaining.
 - **Do the totals math in code.** *Catches* a misread digit that looks plausible. An escrow
   term read as 23 months instead of 2: 23 × $100.83 is $2,319, not the stated $202, and the
   text looked fine. Pull the numbers out and let code do the arithmetic — a floor plan read
@@ -210,6 +257,15 @@ Each habit, and what it catches.
   a form grid, stopped at question 33 and dropped seven fields without a word. For a form
   you'll run thousands of times, build the field list from the *blank* copy — that gives you
   the instructions and a free missing-field check at once.
+- **On a table, count the header row's columns against the data rows' columns.** *Catches*
+  headings that have slid out of place while every number is right. On a Fed table where "2024"
+  appeared twice — once as the annual total, once over the four quarterly columns — one reader
+  read every figure correctly but put the annual 744.7 under Q1, stretched the 2024 heading
+  across two columns instead of four, labelled 2024's Q3 and Q4 as 2025, and left 2025's first
+  two quarters with no year at all. Every value on the page was correct and every value was
+  mislabelled. What gives it away is that the data rows came back with more columns than the
+  header rows — a mismatch anyone can check without reading the table, and worth asking for as a
+  standing check on any table with stacked or repeated headings.
 - **Check whether the output looped or got cut off.** *Catches* a page silently thrown away,
   and a block of invented repeats. Readers built on image models are prone to repeating
   themselves: they are run at a low randomness setting because that transcribes more
@@ -243,15 +299,17 @@ Each habit, and what it catches.
 **Before you trust a new document type, run this list once:**
 
 1. Checked labels together with their values, not just that the text appears on the page?
-2. Had code — not the model — redo any totals or ranges that must add up or stay in bounds?
-3. Confirmed the model's convention for "blank," and checked every response against it?
-4. Written the rule for faint signatures and checkboxes before looking at any results?
-5. Asked about document status — draft, watermark, struck-out edit — as its own question?
-6. Reviewed everything the reader had to guess, not only the parts that looked wrong?
-7. Counted the fields you expected, using the blank form as the checklist?
-8. Checked for loops and cutoffs, and confirmed long legitimate pages weren't binned as failures?
-9. Decided, in advance, exact copy or tidied-up version — and checked for the one you chose?
-10. For anything wrong, checked what the agent actually saw before assuming it invented the answer?
+2. Asked for the condition each value depends on — temperature, date, tier, unit — as its own field?
+3. Had code — not the model — redo any totals or ranges that must add up or stay in bounds?
+4. Confirmed the model's convention for "blank," and checked every response against it?
+5. Written the rule for faint signatures and checkboxes before looking at any results?
+6. Asked about document status — draft, watermark, struck-out edit — as its own question?
+7. Reviewed everything the reader had to guess, not only the parts that looked wrong?
+8. Counted the fields you expected, using the blank form as the checklist?
+9. On tables, checked the header row has as many columns as the data rows?
+10. Checked for loops and cutoffs, and confirmed long legitimate pages weren't binned as failures?
+11. Decided, in advance, exact copy or tidied-up version — and checked for the one you chose?
+12. For anything wrong, checked what the agent actually saw before assuming it invented the answer?
 
 Can't answer one yet? That's the next thing to test, not a reason to skip ahead.
 
@@ -267,6 +325,10 @@ you are buying.
 - One-off page, messy or varied, and you just need it read once → a single whole-page model.
 - The same layout, over and over, at volume → a chain of specialists.
 - Colour on the page carries meaning (a grey cell, a highlighted row) → colour-aware extraction.
+- One page carries several separate things at once (a poster: abstract, charts, two or three
+  tables) → a routing step that identifies the components first and sends each to the reader
+  that suits it. Isaac calls this the usual best approach for complex pages, and the cheap
+  version of the same idea is just cropping to the one component you need.
 
 - **One model reads the whole page.** It sees the picture, the caption and the table at the
   same time, so it can work out that "as you can see, the tallest bar" points at the third row.
@@ -300,7 +362,10 @@ sensible order.
 | Large, clean, flat table | Easy | Size alone isn't difficulty — a clean 33-row table came out whole |
 | Any table read as plain text | Medium | The numbers survive, the row-and-column relationships don't |
 | Well-aligned text mistaken for a table | Medium | A converter sees alignment, not meaning — a paper's title and abstract rebuilt as fabricated tables |
-| Merged or nested table | Hard | Rows attach to the wrong group; a heading repeats onto every row or swallows a value |
+| Merged or nested table | Hard | Rows attach to the wrong group; a heading repeats onto every row or swallows a value; one row's value lands in the next row and leaves its own blank; a long merged heading splits and a stray word drops into a numbers column; on a dense one a cheap classical reader returned a single number for an entire row and silently dropped the rest |
+| Table with stacked or repeated headings (year over quarters) | Hard | Every number right and every number mislabelled — headings slide one column across; catch it by comparing header columns against data columns |
+| Specs that only hold under a stated condition (datasheets, rate tables) | Medium | The number comes back, the condition it applies under comes back empty, and nothing flags it |
+| One page holding several separate components (poster, dashboard sheet) | Hard | Findings filed under the wrong heading; fixed by cropping to the single component, or by routing each piece to its own reader |
 | Wide table with formulas | Hard | Plus and minus signs dropped; one misread header collapsed the whole grid |
 | Scan with no text stored in the file | Hard | Plain text extraction returns nothing at all |
 | Handwriting | Hard | Five readers, three spellings of the same name |
@@ -346,7 +411,15 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   tax worksheet's income limit correctly where a cheap classical reader dropped a digit. Left on
   its small default image model it misread an entire chart, labels and durations both, and the
   same chart read with a larger image model plugged in came back with every value right — the
-  clearest example here that the tool and the model inside it are different questions.
+  clearest example here that the tool and the model inside it are different questions. Three
+  newer failures, all about rows and groups: on a state poverty table it merged Texas's 3,718
+  and Utah's 231 into Utah's cell and left Texas blank, so an agent reading it would report
+  Texas's numbers as Utah's; on a drug side-effects table it put each four-column merged heading
+  into the first Markdown cell and split the longest one so "Disorders" fell into a numbers
+  column; on a conference poster it filed all of a regression table's findings under the last of
+  three group headings, and cropping the page to just that table fixed it with no other change.
+  On the credit side it kept the minus signs in a printed column formula that a cloud service
+  dropped.
 - **Local-index readers (MinerU and similar)** — parses a PDF once and builds a local keyword
   index, giving each passage an address (document, page, block) an agent can use later to fetch
   just that passage instead of reloading the whole document into every prompt — tested by
@@ -360,7 +433,13 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   tables, and read a degraded declassified cable — first sentence and routing grid both — that
   a table-rebuilding tool mangled. On a handwritten crossed-out edit it returned both the
   deleted and the inserted word but never marked which was which, and on another page it
-  quietly corrected a printed typo; broke badly on a dense grid form.
+  quietly corrected a printed typo; broke badly on a dense grid form. It kept Texas's and Utah's
+  poverty rows apart where a table-rebuilding tool merged them, and kept the minus signs in a
+  printed column formula. Its own new failure is headings rather than numbers: on a Fed table
+  where the year appeared twice — once as an annual total, once over four quarterly columns — it
+  read every figure correctly but put the annual 744.7 under Q1, stretched the 2024 heading over
+  two columns instead of four, labelled 2024's Q3 and Q4 as 2025, and left 2025's first two
+  quarters unlabelled. Worth pairing with the header-column check above, which is what spots it.
 - **LightOnOCR** — newly released and still being evaluated generally. On a census table with a
   merged cell spanning two columns (6.9% for high-growth counties, 2.2% for low-growth), it
   returned each number under the right group with the merge intact; a table-rebuilding tool
@@ -371,7 +450,13 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   misreading a digit, tidying a printed value, returning a Markdown table with a merged column
   heading left under only one of the columns it actually spans, and returning a copyright line
   for a pill bottle that is not printed anywhere on it. Writing an instruction around the
-  merged-heading problem fixed that one page and did not carry over to others.
+  merged-heading problem fixed that one page and did not carry over to others. The variant named
+  in the newest tests is Gemini 3.5 Flash, and it supplies two of the clearest positives here:
+  it got every heading right on the same Fed table that slid a document specialist's headings
+  out of place, and it kept a printed column formula's minus signs. Its newest miss is the
+  condition rather than the value — on a chip datasheet, given a plain "read this page"
+  instruction, it returned the error limits with the temperature condition empty, and naming the
+  condition in the instruction fixed that page.
 - **Colour-aware extraction** — asked for structured records, one general image-reading model
   (Qwen 3 VL and similar) returned a cell's colour alongside its contents and mapped grey to
   the legend's "No guidance / Not applicable", where a table-rebuilding tool returned the same
@@ -388,19 +473,36 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   was removed, rather than only the final sentence. On a handwritten edit it caught the
   insertion and dropped the deletion; the vendor's own examples are digital revisions, so
   handwriting may be outside what it is meant for.
+- **Vendor OCR APIs (Datalab and similar)** — its general OCR API kept a dense
+  census income table's 2020 row whole, including the $67,521 median figure, where a cheap
+  classical tool returned one number for that entire row and dropped the rest. Isaac draws the
+  build-or-buy point from it rather than a winner: the vendor only looks more expensive if you
+  price your own engineering time at zero, and working out which vendor fits your pages costs
+  time of its own. Same vendor as the track-changes feature in the entry above, so "we use
+  Datalab" does not tell you which of its products was tested.
 - **Document-trained search (Ovis-VL-Embedding and similar)** — for finding the right page
   rather than reading it, trained on document questions, text inside images and infographics.
   It brought back the right page first for a place name that was abbreviated and crossed by
   contour lines on a map, and for a fee buried in a scanned table. Relevant when the complaint
   is "it never saw the page", not "it misread the page".
 - **Cloud services (Textract and similar)** — handled a big clean table well; dropped plus and
-  minus signs from formulas; weak on faint signatures.
+  minus signs from formulas; weak on faint signatures. The formula case is worth knowing in
+  detail, because the output looks harmless: a tariff table printed the rule "(6) = (5) - (1) -
+  (2)" and Textract returned "5, 1, and 2" after the equals sign with no operators at all, which
+  is a formula you cannot reconstruct and cannot tell is broken from the numbers alone. A
+  table-rebuilding tool, a document specialist and a general image model all kept it intact on
+  the same page.
 - **Cheap classical tools (PaddleOCR and similar)** — matched an image-reading model on one
   timetable, faster and cheaper; its rotation detector fixed a sideways page nothing else read.
   It left a printed typo exactly as printed where others silently fixed it, which is the right
   behaviour or the wrong one depending on what you decided you wanted; it misread struck-through
   handwriting badly. On a printed tax worksheet it dropped the leading digit of $250,525 and
-  returned $50,525, producing a bracket no income can fall in.
+  returned $50,525, producing a bracket no income can fall in. The sharpest failure in this
+  category is Tesseract on a dense census table with merged headers: for the 2020 row it
+  returned only "129,931" and dropped every other 2020 value, including the $67,521 income
+  figure, then carried on into 2019 as though nothing was missing. A vendor OCR API kept that
+  row whole. Note this is the first time Tesseract is tested on its own here rather than inside
+  a wrapper or as the fast half of a routing example.
 - **Form-field and bundle-splitting tools** — turn a flat form into fillable fields, or split
   one file into separate documents. Good scoping ideas for construction and intake paperwork.
 - **Routers that decide when to spend the expensive reader** (Reducto and similar) — run the
@@ -422,18 +524,19 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 
 ## Where this comes from
 
-154 items collected from one Instagram account: 134 reels, 16 story highlights, 4 stories. Two
-of the 154 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
+172 items collected from one Instagram account: 150 reels, 16 story highlights, 6 stories. Two
+of the 172 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
 and many of the newest are two- and three-person conversations with Hamel Husain and a co-host,
 Alexis, so this is not quite one person's account. Nobody watched the videos — every claim
 rests on a caption plus an automated description of what was on screen, and those descriptions
-state that exact slide text, table cells and chart values were not captured. **26 of the 154
+state that exact slide text, table cells and chart values were not captured. **29 of the 172
 are caption-only**: the description service returned nothing, so only the written caption
-survives and whatever was demonstrated on screen is absent here. Most of those 26 are
+survives and whatever was demonstrated on screen is absent here. Most of those 29 are
 highlights with little caption text, so the practical loss is small, but a few are substantive —
 a redline comparison, a wide formula table, a timetable cost comparison, a scoring-tool version
-warning — and their numbers have no second source. Two of the newest items are stories with no
-caption and no description at all, so nothing of them survives.
+warning, and the summative-versus-formative evaluation walkthrough that the "a wrong answer
+tells you the system failed" principle above rests on — and their numbers have no second
+source. All six stories have no caption and no description at all, so nothing of them survives.
 
 The descriptions themselves make mistakes worth knowing about. On one post the caption and the
 description describe different things. On another, the description calls Chandra "a human
@@ -465,14 +568,22 @@ PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR, 
   two columns, it kept each number under its own group while a table-rebuilding tool (Docling)
   duplicated both numbers into all four cells. Isaac was still evaluating it generally when he
   posted this — one good sign on one page, not a verdict on the model.
+- Datalab belongs on the market list too, though it sells a hosted API rather than a model you
+  run yourself. It appears in the source under three different product names — a general OCR API
+  that kept a dense census row whole, a track-changes feature that caught an insertion but
+  dropped a deletion, and "Datalab Accurate" in the bounding-region comparison — which is the
+  reason to ask *which* Datalab product someone means before reading across results.
 - Mistral OCR, GLM-OCR, DeepSeek-OCR, Nanonets OCR, and FireRed-OCR do not appear in the source
   at all — not tested here — unverified.
 
 **2. General vision models.** Built for everything, including reading pages. Names on the
-market: GPT-5, Claude Sonnet, Gemini 3 Pro and Flash. Gemini (the Flash variant) is the most
-heavily tested reader in this whole document — see "Which pages are hard" and "Tool notes" for
-specifics, both its best result (a handwritten name and all six checkboxes right on one bank
-form) and its failures (an invented copyright line, a "corrected" lab value). GPT-5 and Claude
+market: GPT-5, Claude Sonnet, Gemini 3 Pro, Gemini 3.5 Flash. Gemini (the Flash variant) is the
+most heavily tested reader in this whole document — see "Which pages are hard" and "Tool notes"
+for specifics, both its best results (a handwritten name and all six checkboxes right on one
+bank form; every heading right on a Fed table that slid another reader's headings out of place)
+and its failures (an invented copyright line, a "corrected" lab value, a datasheet's temperature
+condition left empty). The version Isaac names in the newest tests is Gemini 3.5 Flash; earlier
+posts say only "Gemini Flash," so don't assume results carry across versions. GPT-5 and Claude
 Sonnet do not appear in the source at all — not tested here — unverified. Qwen, an open-weight
 model not named in the original market list above but worth knowing, is the other most heavily
 tested model in this document — see the checkbox, map-label, and census-form entries elsewhere.
@@ -481,11 +592,15 @@ InternVL does not appear in the source at all — not tested here — unverified
 **3. Classic OCR services.** Older enterprise tools. Names on the market: Azure Document
 Intelligence, AWS Textract, Google Document AI, Tesseract, EasyOCR. AWS Textract is tested in
 "Tool notes": strong on a big clean table, found only 3 of 4 faint signatures, dropped plus and
-minus signs from formulas. Tesseract is tested once, wrapped inside a tool called PDF-MCP: on a
+minus signs from formulas, including returning a printed column formula as bare numbers with no
+operators. Tesseract is now tested twice. Once wrapped inside a tool called PDF-MCP: on a
 private 22-question benchmark, giving an agent direct CLI access scored slightly higher and ran
 faster than going through the wrapper — a test of that wrapper, not a ranking of Tesseract
-against other readers. Azure Document Intelligence, Google Document AI, and EasyOCR do not
-appear in the source at all — not tested here — unverified.
+against other readers. And once on its own, on a dense census income table with merged headers,
+where it returned a single number for the entire 2020 row and dropped the rest of that row's
+values while a vendor OCR API kept the row whole — see "Cheap classical tools" in Tool notes.
+Azure Document Intelligence, Google Document AI, and EasyOCR do not appear in the source at
+all — not tested here — unverified.
 
 **What this section is not.** It is not a routing table, and nothing here should be read as
 "start with this one" — that's the exact shortcut the rest of this skill tells you not to take.
@@ -506,6 +621,6 @@ little on its own — see "A leaderboard position is not information" in Core pr
 
 Every collected post is transcribed in full in TRANSCRIPTS.md, in the same folder
 as this file: caption plus the automated visual description, oldest first. The
-weekly sync appends new posts there. 26 posts have captions only — the description
-service returned nothing, so what was on screen is lost. Two stories have neither
+weekly sync appends new posts there. 29 posts have captions only — the description
+service returned nothing, so what was on screen is lost. All six stories have neither
 caption nor description. Where caption and description disagree, trust the caption.
