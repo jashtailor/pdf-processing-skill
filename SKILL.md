@@ -5,7 +5,7 @@ description: Practical craft for setting up and testing document-extraction agen
 
 # Getting information out of documents, reliably
 
-Distilled from 172 posts collected from Isaac Flath (@isaac_flath), mostly June–October 2026.
+Distilled from 175 posts collected from Isaac Flath (@isaac_flath), mostly June–November 2026.
 See "Where this comes from" for what the source misses.
 
 ## When to use this
@@ -52,6 +52,10 @@ can ask an engineer.
   the spot on the page it came from, a person confirms it in seconds. A teacher converting
   maths worksheets said checking fell from hours to five or ten minutes — that, not the
   score, was the win. If checking costs what doing it by hand costs, you saved nothing.
+  Isaac's own pipeline does this at the level of the single flagged field: it keeps the crop of
+  the spot the value came from, so a reviewer hovers over the flag and sees the original marks
+  without hunting for them. He describes that as what makes an imperfect system trustworthy —
+  people can check it instead of taking its word.
 - **Cost and speed are results, not footnotes.** On one timetable a plain, non-AI table
   reader matched a large image-reading model, 46% faster and 78% cheaper. Spend the
   expensive reader only on pages that need it.
@@ -69,8 +73,13 @@ can ask an engineer.
   need both. When the whole-system test fails — Isaac's three examples are a misread financial
   subtotal, a missing medical record, and a sink counted twice across floor plans — start from
   the task that failed, trace the error back through the system to the step that broke, and
-  build a smaller test for just that step. (This one is from a caption only; the walkthrough
-  itself was not captured, so the three examples are named here, not shown.)
+  build a smaller test for just that step. (The summative-versus-formative walkthrough is from a
+  caption only, so the three examples are named here, not shown.) On a route with several steps,
+  the way you trace it back is to read the record of what each step did and handed on — Isaac
+  walks through a three-stage route (a fast first pass, then a step that finds the layout, then
+  a step that transcribes it) and inspects those step-by-step records to see which stage the
+  error entered at. He goes through the successes as well as the failures — the same habit as
+  step 8 of the method below, applied one step at a time instead of to the finished answer.
 - **When a reader mangles the layout, change the reader or cut the page down — don't patch the
   output.** A table-rebuilding tool merged one state's poverty figure into the next state's
   row and left the first row blank; Isaac calls unpicking that afterwards by splitting cells
@@ -180,6 +189,16 @@ they're a setting or an instruction you choose inside the product you already us
    a good trigger for that last route, even when you cannot say which one is wrong. When several
    readers disagree, try an automated repair pass and re-check agreement before sending to a
    person — but still send it if agreement stays low.
+   - **"Held for review" is a state to design, not just a queue to dump into.** On a form where
+     two readers disagreed on a handwritten surname — one read "Jaferi", the other "Jaffri" —
+     Isaac's pipeline left the accepted value empty rather than picking a side, marked the field
+     as needing review, kept *both* original readings, and attached the crop of that spot on the
+     page. The page showed the surname written one letter per box, so a person settled it in
+     seconds: the double F was right. The record then changed to the accepted value plus a status
+     saying a person had checked the source. Ask for the same four things wherever you can set
+     them: no value guessed in, a status on the field, every reader's answer retained, and the
+     crop. An empty field with a status is honest; a field quietly filled with the wrong one of
+     two readings is not, and nothing downstream can tell the difference later.
 8. **Read a sample of the ones that passed.** Automatic checks only catch mistakes you
    already thought of. This is the step everyone skips.
 9. **Rerun your baseline when the scoring changes** — numbers from two versions of a scoring
@@ -368,7 +387,7 @@ sensible order.
 | One page holding several separate components (poster, dashboard sheet) | Hard | Findings filed under the wrong heading; fixed by cropping to the single component, or by routing each piece to its own reader |
 | Wide table with formulas | Hard | Plus and minus signs dropped; one misread header collapsed the whole grid |
 | Scan with no text stored in the file | Hard | Plain text extraction returns nothing at all |
-| Handwriting | Hard | Five readers, three spellings of the same name |
+| Handwriting | Hard | Five readers, three spellings of the same name; even a surname written one letter per box drew a one-letter disagreement between two readers, with both spellings looking like real names |
 | Checkboxes and signatures | Hard | Ticks missed; faint marks called signed, or unsigned, with no confidence given |
 | Charts without printed numbers | Hard | Values are estimated, not read — one gave 28.8% against a published 28.5%; and a sentence pointing at the chart loses its meaning if the two are read apart |
 | Diagrams and flowcharts | Hard | Labels read fine, connections dropped or invented |
@@ -440,6 +459,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   read every figure correctly but put the annual 744.7 under Q1, stretched the 2024 heading over
   two columns instead of four, labelled 2024's Q3 and Q4 as 2025, and left 2025's first two
   quarters unlabelled. Worth pairing with the header-column check above, which is what spots it.
+  Its newest handwriting miss is one letter wide: on a form where the surname was written one
+  character per box, it read "Jaferi" where a cloud service (Textract) read the correct
+  "Jaffri". Both spellings look like a real name, so nothing but the page settles it — the kind
+  of disagreement that belongs in the hold-for-review state in step 7 rather than being resolved
+  by picking a reader.
 - **LightOnOCR** — newly released and still being evaluated generally. On a census table with a
   merged cell spanning two columns (6.9% for high-growth counties, 2.2% for low-growth), it
   returned each number under the right group with the merge intact; a table-rebuilding tool
@@ -491,7 +515,10 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   (2)" and Textract returned "5, 1, and 2" after the equals sign with no operators at all, which
   is a formula you cannot reconstruct and cannot tell is broken from the numbers alone. A
   table-rebuilding tool, a document specialist and a general image model all kept it intact on
-  the same page.
+  the same page. It is not uniformly weak on handwriting, though: on a form's surname written one
+  character per box it returned the correct "Jaffri" where a document specialist (Chandra) read
+  "Jaferi" — a reminder that "cloud services are bad at handwriting" is a category claim your own
+  pages may not support.
 - **Cheap classical tools (PaddleOCR and similar)** — matched an image-reading model on one
   timetable, faster and cheaper; its rotation detector fixed a sideways page nothing else read.
   It left a printed typo exactly as printed where others silently fixed it, which is the right
@@ -512,6 +539,19 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   expensive reader, and use those two numbers to predict whether the accuracy gain is worth the
   extra time — before building anything fancier. The point for you is the measurement, not the
   machinery. The tool pair used to illustrate it was the source's own example, not the vendor's.
+  A worked example of the whole arrangement: on a parsing platform (LiteParse), a fast first
+  pass failed on the complex tables in a Bolivian sovereign bond prospectus, so the page was
+  escalated to a layout step (Docling) that found the table and a transcription step (Qwen) that
+  read it, and the medium- and long-term external debt figures came back right. The same route
+  was shown pulling fields off an electricity bill and a World Bank financing allocation table.
+  Two things in it are worth copying even if you never build one. First, the expensive path was
+  not simply "a bigger model" — it was find-the-layout and then transcribe-it as two steps you
+  can inspect separately. Second, his comparison table scores each document on both axes at once:
+  one document gained 20 percentage points of accuracy for one extra second, which is exactly the
+  per-page question in step 6 and not a question you can answer from an average. The advanced
+  version predicts *both* numbers — the accuracy gain and the added time — from features of the
+  small model's own output, and only then asks "worth it?": easy pages keep the cheap answer,
+  hard pages escalate.
 - **Agent-driven readers** are arriving, billed as accurate on genuinely hard pages, slowly and
   expensively. Worth testing on your worst pages only.
 - **To pass to an engineer, not act on:** at least one widely used Python PDF library carries a
@@ -524,26 +564,26 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 
 ## Where this comes from
 
-172 items collected from one Instagram account: 150 reels, 16 story highlights, 6 stories. Two
-of the 172 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
+175 items collected from one Instagram account: 152 reels, 16 story highlights, 7 stories. Two
+of the 175 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
 and many of the newest are two- and three-person conversations with Hamel Husain and a co-host,
 Alexis, so this is not quite one person's account. Nobody watched the videos — every claim
 rests on a caption plus an automated description of what was on screen, and those descriptions
-state that exact slide text, table cells and chart values were not captured. **29 of the 172
+state that exact slide text, table cells and chart values were not captured. **30 of the 175
 are caption-only**: the description service returned nothing, so only the written caption
-survives and whatever was demonstrated on screen is absent here. Most of those 29 are
+survives and whatever was demonstrated on screen is absent here. Most of those 30 are
 highlights with little caption text, so the practical loss is small, but a few are substantive —
 a redline comparison, a wide formula table, a timetable cost comparison, a scoring-tool version
 warning, and the summative-versus-formative evaluation walkthrough that the "a wrong answer
 tells you the system failed" principle above rests on — and their numbers have no second
-source. All six stories have no caption and no description at all, so nothing of them survives.
+source. All seven stories have no caption and no description at all, so nothing of them survives.
 
 The descriptions themselves make mistakes worth knowing about. On one post the caption and the
 description describe different things. On another, the description calls Chandra "a human
 annotator named Chandra" when it is a piece of software, and only the caption makes that clear.
 Where a caption and a description disagree, trust the caption.
 
-## OCR models on the market (October 2026) — unverified reference
+## OCR models on the market (November 2026) — unverified reference
 
 **Read this before the list below.** Everything from "Core principles" through "Tool notes"
 above ties back to a specific test in Isaac's posts. Nothing in this section does — it's a
@@ -573,6 +613,12 @@ PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR, 
   that kept a dense census row whole, a track-changes feature that caught an insertion but
   dropped a deletion, and "Datalab Accurate" in the bounding-region comparison — which is the
   reason to ask *which* Datalab product someone means before reading across results.
+- LiteParse is new to this list and, like Datalab, is a platform rather than a model you run
+  yourself — it hosts the route and supplies the fast first pass, with other tools plugged in as
+  the escalation path. It is tested in "Tool notes" above under routers: its fast pass failed on a
+  bond prospectus's complex tables, and escalating to Docling for layout plus Qwen for
+  transcription read them correctly. That is a test of the route, not a reading-accuracy score
+  for the platform.
 - Mistral OCR, GLM-OCR, DeepSeek-OCR, Nanonets OCR, and FireRed-OCR do not appear in the source
   at all — not tested here — unverified.
 
@@ -586,14 +632,18 @@ condition left empty). The version Isaac names in the newest tests is Gemini 3.5
 posts say only "Gemini Flash," so don't assume results carry across versions. GPT-5 and Claude
 Sonnet do not appear in the source at all — not tested here — unverified. Qwen, an open-weight
 model not named in the original market list above but worth knowing, is the other most heavily
-tested model in this document — see the checkbox, map-label, and census-form entries elsewhere.
+tested model in this document — see the checkbox, map-label, and census-form entries elsewhere,
+and the router walkthrough in Tool notes, where it is the transcription step the hard pages are
+escalated to.
 InternVL does not appear in the source at all — not tested here — unverified.
 
 **3. Classic OCR services.** Older enterprise tools. Names on the market: Azure Document
 Intelligence, AWS Textract, Google Document AI, Tesseract, EasyOCR. AWS Textract is tested in
 "Tool notes": strong on a big clean table, found only 3 of 4 faint signatures, dropped plus and
 minus signs from formulas, including returning a printed column formula as bare numbers with no
-operators. Tesseract is now tested twice. Once wrapped inside a tool called PDF-MCP: on a
+operators. It also read a handwritten surname written one letter per box correctly, where a
+document-specialist model misread a single letter — so it is not weak on handwriting across the
+board. Tesseract is now tested twice. Once wrapped inside a tool called PDF-MCP: on a
 private 22-question benchmark, giving an agent direct CLI access scored slightly higher and ran
 faster than going through the wrapper — a test of that wrapper, not a ranking of Tesseract
 against other readers. And once on its own, on a dense census income table with merged headers,
@@ -611,7 +661,7 @@ pages before anything — including this document — tells you which one wins. 
 for this market are close to saturated at the top, so a small score gap between vendors means
 little on its own — see "A leaderboard position is not information" in Core principles.
 
-> **Note for whoever runs the weekly sync — not the reader.** This section is dated October 2026
+> **Note for whoever runs the weekly sync — not the reader.** This section is dated November 2026
 > and was written from general market knowledge, not from a test in Isaac's posts. If the sync
 > finds Isaac testing one of the "not tested here" names above, move that result into "Tool
 > notes" with the test attached, rather than updating the claim here. Otherwise this section only
@@ -621,6 +671,6 @@ little on its own — see "A leaderboard position is not information" in Core pr
 
 Every collected post is transcribed in full in TRANSCRIPTS.md, in the same folder
 as this file: caption plus the automated visual description, oldest first. The
-weekly sync appends new posts there. 29 posts have captions only — the description
-service returned nothing, so what was on screen is lost. All six stories have neither
+weekly sync appends new posts there. 30 posts have captions only — the description
+service returned nothing, so what was on screen is lost. All seven stories have neither
 caption nor description. Where caption and description disagree, trust the caption.

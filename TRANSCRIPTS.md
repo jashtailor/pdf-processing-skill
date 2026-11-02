@@ -4155,3 +4155,63 @@ A presenter with glasses speaks into a microphone while showing a financial tari
 
 **On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
 
+<!-- file: 2026-10-27-DfAVR6MtdFR.md -->
+### What does an OCR router look like? How do you do error analysis on an multi-step OCR route
+
+- Date: 2026-10-27 09:53:08
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DfAVR6MtdFR/
+
+**Caption:** What does an OCR router look like? How do you do error analysis on an multi-step OCR router?
+
+I walk through a simple LiteParse → Docling → Qwen router, and inspect traces to evaluate how the routing steps and models do. We'll look at both successes and failures.
+
+Then we'll discuss a more advances approach using small regression models to predict when a bigger model is worth using.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A presenter in a gray shirt and glasses explains how to extract structured data from PDFs more efficiently by routing documents between small and large AI models. He demonstrates the LiteParse platform processing a Bolivia sovereign bond prospectus, showing how initial OCR fails on complex tables, then uses Docling for layout detection and Qwen for transcription to correctly parse medium- and long-term public external debt figures. Additional examples include extracting fields from a National Electric bill and a World Bank financing allocation table. He illustrates the accuracy-latency tradeoff with a comparison table (e.g., Document A gains 20 percentage points accuracy at +1 sec cost), then describes training regression models on features from the small model's output to predict both accuracy gain and added time. A decision diamond labeled 'Worth it?' routes easy pages to keep the small-model result and escalates hard pages to the large model. The goal is to maintain high accuracy while minimizing compute cost, applicable to any document type.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-10-29-DfGN68soW68.md -->
+### When multiple OCR models disagree on handwritten text in a form, I want that held for revi
+
+- Date: 2026-10-29 16:45:51
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DfGN68soW68/
+
+**Caption:** When multiple OCR models disagree on handwritten text in a form, I want that held for review.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A man in a blue t-shirt and glasses speaks to camera while illustrating an OCR workflow. He explains that when multiple OCR models disagree on a handwritten text field — in this case, the surname on a form — his pipeline holds it for review. One model (Chandra) read 'Jaferi' while another (Textract) read 'Jaffri'. The system set accepted_value to null and status to needs_review. He then shows the original boxed characters spelling 'Jaffri', confirming the double-F is correct, and updates the record to accepted_value: Jaffri with review_status: source_reviewed. He emphasizes retaining both original readings and attaching the source crop so users can hover over flagged areas, see exactly where the discrepancy was, and build confidence that even an imperfect system allows them to fact-check and avoid mistakes.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-11-01-story-4021022074290687884.md -->
+### story story-4021022074290687884
+
+- Date: 2026-11-01 12:00:17
+- Type: story
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/stories/isaac_flath/4021022074290687884
+
+**Caption:** [no caption]
+
+**On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
+
