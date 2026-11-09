@@ -1,10 +1,10 @@
 {
  "account": "isaac_flath",
- "collected_at": "2026-11-02",
- "newest_created_at": "2026-11-01 12:00:17",
- "newest_reel_created_at": "2026-10-29 16:45:51",
+ "collected_at": "2026-11-09",
+ "newest_created_at": "2026-11-05 08:31:00",
+ "newest_reel_created_at": "2026-11-05 08:31:00",
  "counts": {
-  "reel": 152,
+  "reel": 154,
   "highlight": 16,
   "story": 7
  },
@@ -1585,6 +1585,24 @@
    "shortcode": "story-4021022074290687884",
    "local_file": "2026-11-01-story-4021022074290687884.md",
    "has_visual_description": false
+  },
+  {
+   "url": "https://www.instagram.com/reel/DfSXmILhvKx/",
+   "date": "2026-11-03 09:01:13",
+   "type": "reel",
+   "post_id": "18113137433621579",
+   "shortcode": "DfSXmILhvKx",
+   "local_file": "2026-11-03-DfSXmILhvKx.md",
+   "has_visual_description": true
+  },
+  {
+   "url": "https://www.instagram.com/reel/DfXdu-vB6qN/",
+   "date": "2026-11-05 08:31:00",
+   "type": "reel",
+   "post_id": "18220217512351721",
+   "shortcode": "DfXdu-vB6qN",
+   "local_file": "2026-11-05-DfXdu-vB6qN.md",
+   "has_visual_description": true
   }
  ]
 }

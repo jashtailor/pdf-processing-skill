@@ -5,7 +5,7 @@ description: Practical craft for setting up and testing document-extraction agen
 
 # Getting information out of documents, reliably
 
-Distilled from 175 posts collected from Isaac Flath (@isaac_flath), mostly June–November 2026.
+Distilled from 177 posts collected from Isaac Flath (@isaac_flath), mostly June–November 2026.
 See "Where this comes from" for what the source misses.
 
 ## When to use this
@@ -41,7 +41,11 @@ can ask an engineer.
   because *dis*agreement is a cheap way to pick the pages a person must check: one team builds
   its labels by running eight readers over the same table, keeping the answers that agree and
   sending the rest to a person. They say themselves that models can still all agree on the
-  same wrong answer.
+  same wrong answer. And a majority is not a decision either: on a handwritten 1924 diary line,
+  two readers (a vendor OCR API and LightOnOCR-3-4B) read the departure time as 7:37 P.M. and a
+  third (Surya) read 9:37 P.M. Isaac left the value unverified rather than going with the two,
+  because the handwriting itself does not settle whether the digit is a 7 or a 9. Counting votes
+  would have produced a confident answer the page cannot support.
 - **A leaderboard position is not information until you know what is in the benchmark.** Top
   of the table tells you nothing on its own — ask which pages were scored, and look at the
   examples. Real intake does not look like benchmark data: the requests Isaac gets are tables,
@@ -176,6 +180,15 @@ they're a setting or an instruction you choose inside the product you already us
    Record each failure *on the page*: mark the spot it happened, write what went wrong, and tie
    that note to the answer it came from. A plain list of notes is unsearchable a week later —
    "where was the 9 read as a 3?" — and a marked-up page is not.
+   - **Decide how a genuinely unreadable value scores before you meet one.** Some values cannot
+     be read correctly by anybody, because the page is ambiguous: a handwritten digit that is
+     either a 7 or a 9. Isaac counts his own pipeline as *passing* that case — not because it
+     got the time right, but because it declined to settle the digit, marked the value as
+     unverified, and showed the crop and citation so a person could judge the marks themselves.
+     Score it the same way: declining to pick, with the uncertainty marked, is a pass, and a
+     confident transcription of an ambiguous mark is a failure even when it happens to be the
+     likelier reading. Score it the other way round and your test rewards whichever reader hides
+     the problem best.
 6. **Compare accuracy, cost and speed together** — and record them per page and per reader,
    not just as one average. That per-page gap is what tells you which pages actually need the
    expensive reader, and it is usually smaller than expected. Put it as a question anyone can
@@ -199,6 +212,16 @@ they're a setting or an instruction you choose inside the product you already us
      them: no value guessed in, a status on the field, every reader's answer retained, and the
      crop. An empty field with a status is honest; a field quietly filled with the wrong one of
      two readings is not, and nothing downstream can tell the difference later.
+     Two readers against one changes nothing about this. On a handwritten 1924 diary line, a
+     vendor OCR API and LightOnOCR-3-4B both read the departure time as "7:37 P.M." while Surya
+     read "9:37 P.M."; Isaac still held the time unverified, because the page is ambiguous about
+     whether the digit is a 7 or a 9 and three readers voting cannot make it less so.
+     Ask for a fifth thing as well: the uncertainty has to survive into wherever the value is
+     *shown*, not just sit in the field's record. His timeline printed the entry as "New Haven
+     7:37 P.M.?" — the question mark is doing the work, telling whoever reads the finished output
+     that this one is low-confidence, with the citation and crop behind it so they can look. Note
+     he did display the likelier reading here, where the surname case left the value empty; what
+     holds in both is that the output never presents an unsettled value as settled.
 8. **Read a sample of the ones that passed.** Automatic checks only catch mistakes you
    already thought of. This is the step everyone skips.
 9. **Rerun your baseline when the scoring changes** — numbers from two versions of a scoring
@@ -387,7 +410,7 @@ sensible order.
 | One page holding several separate components (poster, dashboard sheet) | Hard | Findings filed under the wrong heading; fixed by cropping to the single component, or by routing each piece to its own reader |
 | Wide table with formulas | Hard | Plus and minus signs dropped; one misread header collapsed the whole grid |
 | Scan with no text stored in the file | Hard | Plain text extraction returns nothing at all |
-| Handwriting | Hard | Five readers, three spellings of the same name; even a surname written one letter per box drew a one-letter disagreement between two readers, with both spellings looking like real names |
+| Handwriting | Hard | Five readers, three spellings of the same name; even a surname written one letter per box drew a one-letter disagreement between two readers, with both spellings looking like real names; one digit can do it too — three readers split 7:37 / 9:37 on a diary's departure time and the page does not say which is right, so no reader choice fixes it |
 | Checkboxes and signatures | Hard | Ticks missed; faint marks called signed, or unsigned, with no confidence given |
 | Charts without printed numbers | Hard | Values are estimated, not read — one gave 28.8% against a published 28.5%; and a sentence pointing at the chart loses its meaning if the two are read apart |
 | Diagrams and flowcharts | Hard | Labels read fine, connections dropped or invented |
@@ -468,7 +491,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   merged cell spanning two columns (6.9% for high-growth counties, 2.2% for low-growth), it
   returned each number under the right group with the merge intact; a table-rebuilding tool
   (Docling) duplicated both numbers into all four cells and lost which group they belonged to.
-  One good sign on one page, not a verdict on the model.
+  Its second appearance names a version, LightOnOCR-3-4B, on a handwritten 1924 diary line: it
+  read the departure time as 7:37 P.M., agreeing with a vendor OCR API (Datalab), while a layout
+  and location tool (Surya) read 9:37 P.M. Nobody can say it was right — the handwritten digit is
+  genuinely ambiguous — so this is an agreement, not a correct answer. Two pages, one of them
+  unresolvable; not a verdict on the model.
 - **General image-reading models (Gemini and similar)** — the only reader to get a handwritten
   name and all six checkboxes right on one bank form, and the most expensive tried; also seen
   misreading a digit, tidying a printed value, returning a Markdown table with a merged column
@@ -492,7 +519,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   words instead of a loose box around them. Newer ones (PP-DocLayoutV3 and similar) also
   predict the order the regions should be read in. The shape matters because of field
   extraction: a loose rectangle that swallows part of the title corrupts a single-field pull
-  off an intake form, birth certificate or licence.
+  off an intake form, birth certificate or licence. It is also used as a transcriber in the
+  newest test, and it is the odd one out there: on a handwritten 1924 diary line it read the
+  departure time as 9:37 P.M. where a vendor OCR API and LightOnOCR-3-4B both read 7:37 P.M.
+  Being outvoted is not being wrong — the digit on the page is ambiguous — but the disagreement
+  is what sent the field to review, which is the job it is doing in that pipeline.
 - **Track-changes features (Datalab and similar)** — built to report what was inserted and what
   was removed, rather than only the final sentence. On a handwritten edit it caught the
   insertion and dropped the deletion; the vendor's own examples are digital revisions, so
@@ -502,8 +533,11 @@ scoping — never to rank vendors, never quoted to a client as a measured result
   classical tool returned one number for that entire row and dropped the rest. Isaac draws the
   build-or-buy point from it rather than a winner: the vendor only looks more expensive if you
   price your own engineering time at zero, and working out which vendor fits your pages costs
-  time of its own. Same vendor as the track-changes feature in the entry above, so "we use
-  Datalab" does not tell you which of its products was tested.
+  time of its own. On a handwritten 1924 diary line its OCR API read the departure time as 7:37
+  P.M., matching LightOnOCR-3-4B, where a layout and location tool (Surya) read 9:37 P.M. —
+  worth recording as agreement rather than accuracy, since the handwriting does not settle the
+  digit. Same vendor as the track-changes feature in the entry above, so "we use Datalab" does
+  not tell you which of its products was tested.
 - **Document-trained search (Ovis-VL-Embedding and similar)** — for finding the right page
   rather than reading it, trained on document questions, text inside images and infographics.
   It brought back the right page first for a place name that was abbreviated and crossed by
@@ -564,12 +598,12 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 
 ## Where this comes from
 
-175 items collected from one Instagram account: 152 reels, 16 story highlights, 7 stories. Two
-of the 175 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
+177 items collected from one Instagram account: 154 reels, 16 story highlights, 7 stories. Two
+of the 177 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
 and many of the newest are two- and three-person conversations with Hamel Husain and a co-host,
 Alexis, so this is not quite one person's account. Nobody watched the videos — every claim
 rests on a caption plus an automated description of what was on screen, and those descriptions
-state that exact slide text, table cells and chart values were not captured. **30 of the 175
+state that exact slide text, table cells and chart values were not captured. **30 of the 177
 are caption-only**: the description service returned nothing, so only the written caption
 survives and whatever was demonstrated on screen is absent here. Most of those 30 are
 highlights with little caption text, so the practical loss is small, but a few are substantive —
@@ -604,10 +638,13 @@ PaddleOCR-VL, GLM-OCR, DeepSeek-OCR, olmOCR, MinerU, Nanonets OCR, FireRed-OCR, 
   product from classic PaddleOCR, tested far more under "Cheap classical tools" in Tool notes.
 - olmOCR appears once in the source, named only as an example of why low-temperature settings
   cause repetition loops — not as a tested reader.
-- LightOnOCR is tested once, in "Tool notes" above: on a census table with a value merged across
+- LightOnOCR is tested twice, in "Tool notes" above: on a census table with a value merged across
   two columns, it kept each number under its own group while a table-rebuilding tool (Docling)
-  duplicated both numbers into all four cells. Isaac was still evaluating it generally when he
-  posted this — one good sign on one page, not a verdict on the model.
+  duplicated both numbers into all four cells; and on a handwritten 1924 diary line, where the
+  version named is **LightOnOCR-3-4B**, it read the departure time the same way a vendor OCR API
+  (Datalab) did and differently from a layout tool (Surya) — an agreement on an ambiguous digit,
+  not a correct answer. Isaac was still evaluating it generally when he posted the first of these
+  — two pages, not a verdict on the model.
 - Datalab belongs on the market list too, though it sells a hosted API rather than a model you
   run yourself. It appears in the source under three different product names — a general OCR API
   that kept a dense census row whole, a track-changes feature that caught an insertion but

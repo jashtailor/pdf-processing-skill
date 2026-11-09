@@ -4215,3 +4215,53 @@ A man in a blue t-shirt and glasses speaks to camera while illustrating an OCR w
 
 **On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
 
+<!-- file: 2026-11-03-DfSXmILhvKx.md -->
+### I'm keeping this departure time unverified even though there's two OCR systems that do agr
+
+- Date: 2026-11-03 09:01:13
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DfSXmILhvKx/
+
+**Caption:** I'm keeping this departure time unverified even though there's two OCR systems that do agree.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A man in a blue shirt and glasses speaks to the camera about building an event timeline from a handwritten notebook dated September 27, 1924. He explains that his system keeps the departure time 'unverified' because two OCR systems disagree on the text. The top of the video shows the diary page with the line 'Left New Haven at 7:37 P.M.' highlighted. His timeline graphic displays 'New Haven 7:37 P.M.?' with a question mark, which he says indicates low confidence and provides visual cue of possible inaccuracy to users. He shows that Datalab's OCR API and LightOnOCR-3-4B both read '7:37 P.M.', while Surya read '9:37 P.M.', triggering a human review. He displays the cropped source text and notes the handwriting is ambiguous — it's unclear if the digit is a 7 or a 9. For evaluation purposes, he considers this a passing result because the system correctly flagged the uncertainty with a question mark and provided a citation/bounding box so users can make their own determination.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
+<!-- file: 2026-11-05-DfXdu-vB6qN.md -->
+### I shut down my paid AI community and refunded over $7,000, even though it made over $30,00
+
+- Date: 2026-11-05 08:31:00
+- Type: reel
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/reel/DfXdu-vB6qN/
+
+**Caption:** I shut down my paid AI community and refunded over $7,000, even though it made over $30,000 in revenue in the last few months.
+
+A lesson that applied to everyone would have to be very, very general. But the details are where projects succeed and fail.
+
+So now my friend Joe and I are building a course specifically about document processing.
+
+If you're working on a document system, drop a comment or a DM with what you're working on. I'd love to chat.
+
+**On screen:** Source: automated media description returned by instagram-cli `media-understanding`. The CLI exposes no media file or frame, so the video/image was not viewed directly; the description below is the only visual evidence and is reproduced as returned.
+
+A man in a blue shirt and glasses speaks directly to camera from what appears to be a home office, explaining why he shut down his paid AI community despite it generating over $30,000 in revenue in recent months. He states he refunded over $7,000 because engagement declined over time. He reflects that 'building with AI' is too broad a topic—while shared principles exist, the specific product details are critical for success, comparing a construction team managing materials to a radiologist reviewing scans. To address this, he announces he and a friend named Joe are now building a focused course specifically about document processing, where they will work through detailed problems until a system works. He invites viewers working on document systems to comment or DM him to chat.
+
+### On-screen or spoken text quoted in the description
+
+- [none quoted]
+
+### Gaps
+
+- Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
+
