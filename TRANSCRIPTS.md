@@ -4265,3 +4265,19 @@ A man in a blue shirt and glasses speaks directly to camera from what appears to
 
 - Exact slide/overlay text, terminal output, table cells, and chart values beyond what the description quotes: [not visible]
 
+<!-- file: 2026-11-09-Dfh7OHDloa_.md -->
+### Choosing an OCR model is step 1, but that's where most people stop.
+
+- Date: 2026-11-09 10:00:30
+- Type: post
+- Author: @isaac_flath (Isaac Flath)
+- URL: https://www.instagram.com/p/Dfh7OHDloa_/
+
+**Caption:** Choosing an OCR model is step 1, but that's where most people stop.
+
+This is the seven-step roadmap I use to explain how all the pieces fit together.
+
+Save it for your next document workflow. Comment PDF for details on PDF to Production, where Joe Barrow and I will work through these components in detail using realistic PDFs.
+
+**On screen:** [not visible] The media-understanding service returned an empty description for this item after three attempts, and the CLI exposes no media URL, so the visual content could not be transcribed. Only the caption above is available.
+

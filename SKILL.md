@@ -5,7 +5,7 @@ description: Practical craft for setting up and testing document-extraction agen
 
 # Getting information out of documents, reliably
 
-Distilled from 177 posts collected from Isaac Flath (@isaac_flath), mostly June–November 2026.
+Distilled from 178 posts collected from Isaac Flath (@isaac_flath), mostly June–November 2026.
 See "Where this comes from" for what the source misses.
 
 ## When to use this
@@ -34,7 +34,11 @@ can ask an engineer.
   users must click back to the source, whether you need structured records or just text, where
   it has to run, what it can cost, how fast it has to come back — narrows you to a *group* of
   candidates. You compare inside that group. Jump straight to a comparison and you are weighing
-  up things that were never interchangeable.
+  up things that were never interchangeable. Isaac puts the same point the other way round:
+  choosing the model is **step 1 of a seven-step roadmap**, and it is where most people stop.
+  The seven steps are on a carousel whose slides were not captured, so they can't be listed
+  here — what survives is the proportion. Model choice is the smallest part of the job, and
+  the rest of this document is about the part that gets skipped.
 - **No tool wins everywhere, so test on your own pages.** On one page the cheap option is
   right and the expensive one wrong; on the next it flips. Two tools agreeing isn't proof
   either is right — only a person's labelled answer is. Agreement is still worth recording,
@@ -598,18 +602,19 @@ scoping — never to rank vendors, never quoted to a client as a measured result
 
 ## Where this comes from
 
-177 items collected from one Instagram account: 154 reels, 16 story highlights, 7 stories. Two
-of the 177 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than by Isaac Flath,
-and many of the newest are two- and three-person conversations with Hamel Husain and a co-host,
-Alexis, so this is not quite one person's account. Nobody watched the videos — every claim
-rests on a caption plus an automated description of what was on screen, and those descriptions
-state that exact slide text, table cells and chart values were not captured. **30 of the 177
-are caption-only**: the description service returned nothing, so only the written caption
-survives and whatever was demonstrated on screen is absent here. Most of those 30 are
+178 items collected from one Instagram account: 154 reels, 16 story highlights, 7 stories, and 1
+carousel post. Two of the 178 were posted by a collaborator (Hamel Husain, @hamelsmu) rather than
+by Isaac Flath, and many of the newest are two- and three-person conversations with Hamel Husain
+and a co-host, Alexis, so this is not quite one person's account. Nobody watched the videos —
+every claim rests on a caption plus an automated description of what was on screen, and those
+descriptions state that exact slide text, table cells and chart values were not captured.
+**31 of the 178 are caption-only**: the description service returned nothing, so only the written
+caption survives and whatever was demonstrated on screen is absent here. Most of those 31 are
 highlights with little caption text, so the practical loss is small, but a few are substantive —
 a redline comparison, a wide formula table, a timetable cost comparison, a scoring-tool version
-warning, and the summative-versus-formative evaluation walkthrough that the "a wrong answer
-tells you the system failed" principle above rests on — and their numbers have no second
+warning, the summative-versus-formative evaluation walkthrough that the "a wrong answer
+tells you the system failed" principle above rests on, and the seven-step roadmap carousel
+described in Core principles — and their numbers have no second
 source. All seven stories have no caption and no description at all, so nothing of them survives.
 
 The descriptions themselves make mistakes worth knowing about. On one post the caption and the
